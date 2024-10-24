@@ -1,0 +1,60 @@
+﻿@page "/AdminMessages"
+@inject HttpClient _httpclient
+<div>
+    <table>
+        <thead>
+            <tr>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Messages is not null)
+            {
+                @foreach (Messages item in Messages)
+                {
+                    <tr id="@item.ID">
+                        <td>
+                            @item.Message
+                        </td>
+                        <td>
+                            @item.IDSend
+                        </td>
+                        <td>
+                            @item.SabtDate
+                        </td>
+                        <td>
+                            @if (item.VillaID is not null)
+                                @item.VillaID
+                            else
+                            {
+
+                            }
+                        </td>
+                    </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@code {
+    public IEnumerable<Messages> Messages { get; set; }
+}
+
+@functions {
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Messages = await _httpclient.GetFromJsonAsync<IEnumerable<Messages>>("/api/Messages");
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+
+        base.OnInitializedAsync();
+    }
+}

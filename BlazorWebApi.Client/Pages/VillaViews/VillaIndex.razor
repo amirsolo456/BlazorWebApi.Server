@@ -1,0 +1,142 @@
+﻿@page "/VillaIndex"
+@inject HttpClient _HttpClient;
+@inject ToastrService Toastr
+@layout BlazorWebApi.Client.Shared.Admin.AdminLayout
+
+<div class="W-100 card border-0 p-4" dir="rtl">
+
+    <div class="col">
+
+        <div>
+
+            <div class="card-header bg-success bg-gradient m-lg-0 py-3">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h2 class="text-white py-2">
+                            همه ویلا ها
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body border p-4">
+                <div class="row pb-3">
+                    <div class="col-6 offset-6 text-end">
+                        <a href="/CreateVilla" class="btn btn-secondary ">
+                            تعریف ویلای جدید   <i class="bi bi-plus-circle"></i>
+                        </a>
+                    </div>
+                </div>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                ویرایش
+                            </th>
+                            <th>
+                                حذف
+                            </th>
+                            <th>
+                                نام
+                            </th>
+                            <th>
+                                قیمت (تومان)
+                            </th>
+                            <th>
+                                مساحت (متر)
+                            </th>
+                            <th>
+                                تعداد اتاق
+                            </th>
+                            <th>
+                                توضیحات
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Villas != null && Villas.Any())
+                        {
+                            @foreach (Villa item in Villas)
+                            {
+                                @if (item != null)
+                                {
+                                    <tr id="row+@item.ID">
+                                        <td>
+                                            <a href="/EditVilla/@item.ID">
+                                                <button type="submit" class="btn btn-outline-secondary">
+                                                </button>
+                                            </a>
+
+                                        </td>
+                                        <td>
+                                            <button @onclick="() =>DeleteVilla(item.ID)" type="submit" class="btn btn-outline-secondary">
+                                            </button>
+                                        </td>
+                                        <td>
+                                            @item.Name
+                                        </td>
+                                        <td>
+                                            @item.Price.ToString("N0")
+                                        </td>
+                                        <td>
+                                            @item.Sqft
+                                        </td>
+                                        <td>
+                                            @item.Occupancy
+                                        </td>
+                                        <td>
+                                            @item.Description
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+@code {
+    private IEnumerable<Villa>? Villas { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Villas = await _HttpClient.GetFromJsonAsync<IEnumerable<Villa>>("/api/Villa");
+
+        await base.OnInitializedAsync();
+    }
+
+    public async void DeleteVilla(int ID)
+    {
+        try
+        {
+            var Response = await _HttpClient.DeleteAsync("/api/Villa/" + ID);
+            if (Response.IsSuccessStatusCode)
+            {
+                await Toastr.ShowSuccess("Villa deleted successfully", "Success");
+                Console.WriteLine("ویلا با موفقیت حذف شد.");
+                Villas = await _HttpClient.GetFromJsonAsync<IEnumerable<Villa>>("/api/Villa");
+                StateHasChanged();
+            }
+            else
+            {
+                Console.WriteLine("خطا در هنگام حذف ویلا.");
+                await Toastr.ShowError("Failed to delete villa", "Error");
+            }
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("بروز خطا در حذف ویلا");
+        }
+    }
+
+    public async void EditVilla(int ID)
+    {
+
+    }
+}
+

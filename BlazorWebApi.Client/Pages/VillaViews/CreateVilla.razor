@@ -1,0 +1,123 @@
+﻿@page "/CreateVilla"
+@inject HttpClient _HttpClient
+@layout BlazorWebApi.Client.Shared.Admin.AdminLayout
+
+<style>
+    .style1 {
+        float: end;
+    }
+
+    ,
+    .style2 {
+        margin-right =4;
+    }
+
+    ,
+    .style3 {
+        background-color: transparent !important;
+        color: black;
+    }
+
+    .bordered-div {
+        border: 2px solid black; /* ضخامت 2px، نوع حاشیه solid و رنگ سیاه */
+        padding: 0px; /* فاصله داخلی از محتوای داخل div */
+        margin: 20px; /* فاصله از بیرون div به عناصر اطراف */
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col bordered-div">
+            <form class="" style="text-align: center; background-color:cadetblue">
+                <label for="upload">عکس ویلا را انتخاب کنید:</label>
+                <input type="file" id="upload" name="upload" accept="image/*">
+            </form>
+        </div>
+        <div class="col">
+            <EditForm Model="@villa" OnValidSubmit="AddVilla">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="form-group">
+                    <label>نام ویلا</label>
+                    <InputText @bind-Value="villa.Name" class="form-control" id="VillaNmae" aria-describedby="نام" placeholder="" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" for="VillaPrice">قیمت</label>
+                    <InputNumber @bind-Value="villa.Price" class="form-control" id="price" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Sqft" for="VillaSqft">مساحت</label>
+                    <InputNumber @bind-Value="villa.Sqft" class="form-control" id="sqfrt" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Occupancy" for="VillaOccpancy">اتاق</label>
+                    <InputNumber @bind-Value="villa.Occupancy" class="form-control" id="occupancy" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" for="">توضیحات</label>
+                    <InputTextArea @bind-Value="villa.Description" class="form-control" />
+                </div>
+                <div class="form-check">
+                    <label asp-for="Parking" class="style2" for="VillaParking">پارکینگ</label>
+                    <InputCheckbox @bind-Value="villa.Jacuzzi" />
+                </div>
+                <div class="form-check">
+                    <label asp-for="Parking" class="style2" for="VillaParking">استخر</label>
+                    <InputCheckbox @bind-Value="villa.Swimmingpool" />
+                </div>
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="villa.Parking" />
+                    <label asp-for="Parking" class="style2" for="VillaParking">پارکینگ</label>
+                </div>
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="villa.Guestroom" />
+                    <label asp-for="Guestroom" class="style2" for="VillaGuestRoom">اتاق میهمان</label>
+                </div>
+                <button type="submit">ایجاد ویلا</button>
+            </EditForm>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    public Villa villa = new Villa() { Name = "" };
+
+    public async void AddVilla()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, "/api/Villa/Create");
+        // request.Headers.Add("Authorization", Configuration.GetValue<string>("ApiKey"));
+        request.Content = new StringContent(
+            JsonSerializer.Serialize(
+                new Villa
+                    {
+                        Name = villa.Name,
+                        Guestroom = villa.Guestroom,
+                        Description = villa.Description,
+                        Price = villa.Price,
+                        Sqft = villa.Sqft,
+                        Parking = villa.Parking,
+                        Occupancy = villa.Occupancy,
+                        ImageUrl = null,
+                        Jacuzzi = villa.Jacuzzi,
+                        Swimmingpool = villa.Swimmingpool
+                    }
+                ), Encoding.UTF8, "application/json"
+            );
+        var response =   await _HttpClient.SendAsync(request);
+
+        // var response = _HttpClient.PostAsJsonAsync("/api/Villa", villa);
+        if (response.IsSuccessStatusCode)
+        {
+
+            Console.WriteLine("ویلا با موفقیت ایجاد شد!");
+        }
+        else
+        {
+            Console.WriteLine("خطا در ایجاد ویلا.");
+        }
+    }
+}
+

@@ -1,0 +1,14 @@
+﻿@inject IConfiguration Configuration
+
+<nav class="navbar navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">@Configuration["Footer"] @year </span>
+</nav>
+
+@code{
+    string year = "";
+    protected override void OnInitialized()
+    {
+        year = DateTime.Now.Year.ToString();
+        base.OnInitialized();
+    }
+}

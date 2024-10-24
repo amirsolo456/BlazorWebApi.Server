@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.10" PrivateAssets="all" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.21" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="7.0.0" />
+		<PackageReference Include="Serilog.Extensions.Logging" Version="7.0.1-dev-10354" />
+		<PackageReference Include="Serilog.Sinks.BrowserHttp" Version="1.0.0-dev-00032" />
+	</ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\BlazorWebApi.Domain\BlazorWebApi.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Layout\" />
+    <Folder Include="Pages\CustomerPages\" />
+    <Folder Include="Pages\OwnerPages\" />
+    <Folder Include="Shared\Customert\" />
+    <Folder Include="Shared\Owner\" />
+    <Folder Include="wwwroot\sample-data\" />
+  </ItemGroup>
+</Project>

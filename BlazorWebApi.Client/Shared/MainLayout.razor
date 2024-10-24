@@ -1,0 +1,30 @@
+﻿@inherits LayoutComponentBase
+@inject HttpClient _httpClient
+
+<CascadingValue Value="@shoppingCartCountModel" Name="ShoppingCartCountModel">
+
+    <Header />
+    <div class="sidebar-container">
+        <div class="container">
+            @Body
+        </div>
+    </div>
+
+
+    <Footer />
+</CascadingValue>
+
+
+
+@code {
+    private ShoppingCartCountModel? shoppingCartCountModel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        shoppingCartCountModel = new ShoppingCartCountModel();
+        shoppingCartCountModel.Count = await _httpClient.GetFromJsonAsync<int>("/api/ShoppingCart/count"); ;
+        await base.OnInitializedAsync();
+    }
+
+
+}

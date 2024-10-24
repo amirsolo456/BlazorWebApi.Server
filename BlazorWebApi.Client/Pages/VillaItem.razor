@@ -1,0 +1,130 @@
+﻿@using System.Linq.Expressions
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+@using BlazorWebApi.Domain.Entities;
+@inject NavigationManager navigationManager;
+@inject HttpClient _httpClient
+@inject IConfiguration Configuration
+
+<div class="card col-3 m-2" style="width: 18rem;padding:0">
+    <img src="/Images/@villa.ImageUrl" style="width:100%" class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">
+            <a href="">
+                @villa.Name
+            </a>
+        </h5>
+        <p class="card-text">قیمت : @villa.Price.ToString("N0")</p>
+        <div>
+
+            <input @bind="quantity" type="number" placeholder="تعداد؟" class="form-control" />
+
+            <button class="btn btn-outline-success m-2" @onclick="AddToCartAsync">
+                 
+                @if (HasProductInCart)
+                {
+                    <span>
+                        اضافه به سبد خرید
+                        @if (quantity.HasValue)
+                        {
+                            <text> @quantity بیشترش کن</text>
+                        }
+                    </span>
+                }
+                else
+                {
+                    <span>
+                        اولین خریدت رو انجام بده
+                    </span>
+                }
+            </button>
+
+        </div>
+        <a href="/VillaDetail/@villa.ID" class="btn btn-primary">نمایش جزئیات</a>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public Villa? villa { get; set; }
+    public double? quantity { get; set; } = 0;
+    private bool HasProductInCart { get; set; } = false;
+
+    [CascadingParameter(Name = "ShoppingCartCountModel")]
+    private ShoppingCartCountModel? shoppingCartCountModel { get; set; }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (villa != null)
+        {
+            HasProductInCart = await _httpClient.GetFromJsonAsync<bool>(
+                "/api/ShoppingCart/has-villa/" + villa.ID+","+0
+                );
+        }
+
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task AddToCartAsync()
+    {
+        if (villa != null)
+        {
+            Console.WriteLine(HasProductInCart.ToString());
+            if (!HasProductInCart)
+            {
+                Console.WriteLine(JsonSerializer.Serialize(
+                        new ShoppingCart
+                            {
+                                CustomerID = 0,
+                                Quantity = quantity.Value,
+                                VillaID = villa.ID
+                            }));
+                var request = new HttpRequestMessage(HttpMethod.Post, "/api/ShoppingCart");
+                // request.Headers.Add("Authorization", Configuration.GetValue<string>("ApiKey"));
+                request.Content = new StringContent(
+                    JsonSerializer.Serialize(
+                        new ShoppingCart
+                            {
+                                CustomerID = 0,
+                                Quantity = quantity.Value,
+                                VillaID = villa.ID
+                            }
+                    ), Encoding.UTF8, "application/json"
+                    );
+                await _httpClient.SendAsync(request);
+
+            }
+            else
+            {
+                var request = new HttpRequestMessage(HttpMethod.Put, "/api/ShoppingCart");
+                request.Headers.Add("Authorization", Configuration.GetValue<string>("ApiKey"));
+                request.Content = new StringContent(
+                    JsonSerializer.Serialize(
+                        new ShoppingCart
+                            {
+                                CreateDate = DateTime.Now,
+                                CustomerID = 0,
+                                Quantity = quantity.Value,
+                                UpdateDate = DateTime.Now,
+                                VillaID = villa.ID
+                            }
+                        ), Encoding.UTF8, "application/json"
+                    );
+                await _httpClient.SendAsync(request);
+            }
+
+            HasProductInCart = await _httpClient.GetFromJsonAsync<bool>(
+                "/api/ShoppingCart/has-villa/" + villa.ID+","+0
+                );
+
+            quantity = null;
+
+            if (shoppingCartCountModel != null)
+            {
+                shoppingCartCountModel.OnCountChange();
+            }
+        }
+        //.NavigateTo("/cart");
+    }
+}

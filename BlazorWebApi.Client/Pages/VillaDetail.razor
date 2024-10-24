@@ -1,0 +1,133 @@
+﻿@page "/VillaDetail/{ID:int}"
+@inject HttpClient _httpclient
+<style>
+    .style2 {
+        font-family: Tahoma;
+        font-size: 16px;
+    }
+</style>
+<div class="row">
+    @if (villa != null)
+    {
+        <div class="col-3">
+            <img src="Images/@villa.ImageUrl" alt="تصویر" style="width:100%" />
+        </div>
+        <div class="col-9">
+            <table class="table table-bordered table-striped"  >
+                <thead>
+                    <tr>
+                        <th>
+                            نام ویلا
+                        </th>
+                        <th>
+                            قیمت برای هر شب
+                        </th>
+                        <th>
+                            اطلاعات بیشتر
+                        </th>
+                        <th>
+                            مساحت
+                        </th>
+                        <th>
+                            تعداد اتاق
+                        </th>
+                        <th>
+                            جکوزی
+                        </th>
+                        <th>
+                            پارکینگ
+                        </th>
+                        <th>
+                            استخر
+                        </th>
+                        <th>
+                            اتاق میهمان
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>
+
+                            <label asp-for="Guestroom" class="style2" for="VillaGuestRoom">@villa.Name</label>
+
+                        </td>
+                        <td>
+
+                            <label asp-for="Guestroom" class="style2" for="VillaGuestRoom">@villa.Price</label>
+
+                        </td>
+                        <td>
+
+
+                            <label asp-for="Guestroom" class="style2" for="VillaGuestRoom">@villa.Description</label>
+
+                        </td>
+                        <td>
+
+                            <label asp-for="Guestroom" class="style2" for="VillaGuestRoom">@villa.Sqft</label>
+
+                        </td>
+                        <td>
+
+                            <label class="style2" for="VillaGuestRoom">@villa.Occupancy</label>
+
+                        </td>
+                        <td>
+
+                            <label asp-for="Guestroom" class="style2" for="VillaGuestRoom"></label>
+                            <InputCheckbox @bind-Value="@villa.Jacuzzi" class="style2" for="VillaGuestRoom">@villa.Jacuzzi</InputCheckbox>
+
+                        </td>
+                        <td>
+
+                            <label asp-for="Guestroom" class="style2" for="VillaGuestRoom"></label>
+                            <InputCheckbox @bind-Value="@villa.Parking" class="style2" for="VillaGuestRoom">@villa.Parking</InputCheckbox>
+
+                        </td>
+                        <td>
+
+                            <label asp-for="Guestroom" class="style2" for="VillaGuestRoom"></label>
+                            <InputCheckbox @bind-Value="@villa.Swimmingpool" class="style2" for="VillaGuestRoom">@villa.Swimmingpool</InputCheckbox>
+
+                        </td>
+                        <td>
+
+                            <label asp-for="Guestroom" class="style2" for="VillaGuestRoom"></label>
+                            <InputCheckbox @bind-Value="@villa.Swimmingpool" class="style2" for="VillaGuestRoom">@villa.Swimmingpool</InputCheckbox>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int? ID { get; set; }
+    public Villa? villa { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            villa = await _httpclient.GetFromJsonAsync<Villa>("/api/Villa/" + ID);
+            Console.WriteLine(villa.ImageUrl);
+            if (villa != null)
+            {
+                Console.WriteLine("Success");
+            }
+            else Console.WriteLine("Failed");
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Failed");
+        }
+        base.OnInitializedAsync();
+    }
+}

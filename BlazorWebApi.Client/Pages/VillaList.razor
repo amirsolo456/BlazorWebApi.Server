@@ -1,0 +1,39 @@
+﻿@page "/"
+@inject HttpClient _HttpClient
+@using BlazorWebApi.Domain.Entities;
+
+<div>
+    <div class="row">
+        @if (Villas != null && Villas.Any())
+        {
+            @foreach (Villa item in Villas)
+            {
+                <VillaItem villa="item" />
+            }
+        }
+
+
+    </div>
+</div>
+
+@code {
+
+    public IEnumerable<Villa>? Villas { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Villas = await _HttpClient.GetFromJsonAsync<IEnumerable<Villa>>("/api/Villa");
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("خطا در هنگام گرفتن اطلاعات ویلا");
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+
+}
+

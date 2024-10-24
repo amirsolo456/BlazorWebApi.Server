@@ -1,0 +1,112 @@
+﻿@page "/ShoppingCard/{CustomerID:int}"
+@inject HttpClient _httpClient
+@inject NavigationManager _navigate
+@using BlazorWebApi.Client.Components
+
+<PageTitle>سبد سفارش</PageTitle>
+<div class="row"  >
+    <h1>سبد سفارش</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                @foreach (var header in TableHeaderNames)
+                {
+                    <th colspan="@header.Colspan">@header.Name</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (CustomerView != null)
+            {
+                @foreach (var item in CustomerView.ShoppingCarts)
+                {
+                    <tr>
+                        <td colspan="2">
+                            <img src="/Images/@item.villa.ImageUrl" style="max-width:120px" class="card-img-top" alt="...">
+                        </td>
+                        <td>@item.villa.Name</td>
+                        <td>@item.Quantity </td>
+                        <td>@item.villa.Price</td>
+                        <td>@(item.villa.Price * @item.Quantity)</td>
+                        <td>
+                            <button class="btn btn-outline-danger" @onclick="() => DeleteItemAsync(item)">X</button>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+<div class="col">
+    <button class="btn btn-secondary" onclick="GoToPayment">
+        خرید
+    </button>
+    <button class="btn btn-secondary" onclick="GoBack">انصراف
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public int? CustomerID { get; set; }
+    [CascadingParameter(Name = "ShoppingCartCountModel")]
+    private ShoppingCartCountModel? shoppingCartCountModel { get; set; }
+    private Customer CustomerView { get; set; }
+
+
+
+    List<TableHeaderName> TableHeaderNames = new()
+    {
+        new TableHeaderName("عکس",2),
+        new TableHeaderName("نام",1),
+        new TableHeaderName("تعداد",1),
+        new TableHeaderName("قیمت",1),
+        new TableHeaderName("جمع",1),
+        new TableHeaderName("دستورات",1)
+    };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(CustomerID);
+        var request = new HttpRequestMessage(HttpMethod.Get, "/api/Customer/1,True");
+        HttpResponseMessage response = await _httpClient.SendAsync(request);
+        CustomerView = await response.Content.ReadFromJsonAsync<Customer>();
+
+        await base.OnInitializedAsync();
+    }
+}
+
+@functions {
+    private async Task DeleteItemAsync(ShoppingCart item)
+    {
+        if (item != null)
+        {
+            await _httpClient.DeleteAsync("api/ShoppingCart/" + item.ID);
+            item = null;
+            if (shoppingCartCountModel != null)
+            {
+                shoppingCartCountModel.OnCountChange();
+            }
+        }
+    }
+
+    public void GoBack()
+    {
+        _navigate.NavigateTo("/");
+    }
+
+    private bool GoToPayment()
+    {
+        try
+        {
+
+            return true;
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("عدم پرداخت موفق");
+            return false;
+        }
+    }
+}

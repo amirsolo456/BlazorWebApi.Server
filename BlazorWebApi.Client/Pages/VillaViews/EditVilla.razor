@@ -1,0 +1,181 @@
+﻿@page "/EditVilla/{ID:int}"
+@using System.Linq.Expressions
+@inject HttpClient _httpclient
+@inject NavigationManager navigate
+@layout BlazorWebApi.Client.Shared.Admin.AdminLayout
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        display: grid;
+        height: 100vh; /* ارتفاع کل صفحه */
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        height: 100vh; /* ارتفاع کل صفحه */
+        display: flex;
+        flex-direction: column; /* تنظیم جهت عمودی */
+    }
+
+    .top {
+        flex: 1; /* فضای مساوی برای قسمت بالا */
+        background-color: #f2f2f2; /* رنگ پس‌زمینه */
+        padding: 20px; /* فاصله داخلی */
+    }
+
+    .bottom {
+        flex: 1; /* فضای مساوی برای قسمت پایین */
+        background-color: #e6e6e6; /* رنگ پس‌زمینه */
+        padding: 20px; /* فاصله داخلی */
+    }
+</style>
+
+<div class="container">
+
+    @if (villa != null)
+    {
+        <EditForm Model="@villa" OnValidSubmit="UpdateVilla" @oncancel="Cancel">
+            <ValidationSummary />
+            <div class="top">
+                <div class="col bordered-div">
+                    <form class="" style="text-align: center; background-color:cadetblue">
+                        <label for="upload">عکس ویلا را انتخاب کنید:</label>
+                        <InputFile OnChange="HandleFileSelected" />
+
+                    </form>
+                </div>
+            </div>
+            <div class="bottom" >
+
+                <div class="form-group">
+                    <label>نام ویلا</label>
+                    <InputText @bind-Value="villa.Name" class="form-control" id="VillaNmae" aria-describedby="نام" placeholder="" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <ValidationMessage For="@(() => villa.Name)" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" for="VillaPrice">قیمت</label>
+                    <InputNumber @bind-Value="villa.Price" class="form-control" id="price" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Sqft" for="VillaSqft">مساحت</label>
+                    <InputNumber @bind-Value="villa.Sqft" class="form-control" id="sqfrt" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Occupancy" for="VillaOccpancy">اتاق</label>
+                    <InputNumber @bind-Value="villa.Occupancy" class="form-control" id="occupancy" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" for="">توضیحات</label>
+                    <InputTextArea @bind-Value="villa.Description" class="form-control" />
+                </div>
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="villa.Jacuzzi" />
+                    <label asp-for="Parking" class="style2" for="VillaParking">جکوزی</label>
+                </div>
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="villa.Swimmingpool" />
+                    <label asp-for="Parking" class="style2" for="VillaParking">استخر</label>
+
+                </div>
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="villa.Parking" />
+                    <label asp-for="Parking" class="style2" for="VillaParking">پارکینگ</label>
+                </div>
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="villa.Guestroom" />
+                    <label asp-for="Guestroom" class="style2" for="VillaGuestRoom">اتاق میهمان</label>
+                </div>
+                <button type="submit">ویرایش</button>
+                <div class="bottom">
+                    <button @onclick="Cancel" type="button">انصراف</button>
+                </div>
+            </div>
+        </EditForm>
+    }
+
+</div>
+
+
+@code {
+    [Parameter]
+    public int ID { get; set; }
+    public Villa? villa { get; set; }
+    private string fileContent;
+
+    protected override async void OnParametersSet()
+    {
+        try
+        {
+            villa = await _httpclient.GetFromJsonAsync<Villa>("/api/Villa/" + ID);
+
+            if (villa != null)
+            {
+                Console.WriteLine("Success");
+            }
+            else Console.WriteLine("Failed");
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Failed");
+        }
+
+    }
+
+    public async void UpdateVilla()
+    {
+        Console.WriteLine(fileContent);
+        HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Put, "/api/Villa");
+        requestMessage.Content = new StringContent(JsonSerializer.Serialize(new Villa
+            {
+                ID = ID,
+                Name = villa.Name,
+                Guestroom = villa.Guestroom,
+                Description = villa.Description,
+                Price = villa.Price,
+                Sqft = villa.Sqft,
+                Parking = villa.Parking,
+                Occupancy = villa.Occupancy,
+                ImageUrl = fileContent,
+                Jacuzzi = villa.Jacuzzi,
+                Swimmingpool = villa.Swimmingpool
+
+            }), Encoding.UTF8, "application/json");
+        var response = await _httpclient.SendAsync(requestMessage);
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("SUCCESS");
+            navigate.NavigateTo("/VillaIndex");
+        }
+        else Console.WriteLine("Failed");
+
+    }
+
+    public void Cancel()
+    {
+        navigate.NavigateTo("/VillaIndex");
+    }
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.GetMultipleFiles(1).FirstOrDefault(); // فقط یک فایل انتخاب می‌شود
+
+        if (file != null)
+        {
+            using (var stream = file.OpenReadStream( 10 * 1024 * 1024)) // حداکثر 10MB
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    fileContent = await reader.ReadToEndAsync(); // خواندن محتوای فایل به عنوان رشته
+                }
+            }
+        }
+    }
+}
