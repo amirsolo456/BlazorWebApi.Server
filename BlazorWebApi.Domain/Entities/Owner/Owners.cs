@@ -9,10 +9,8 @@ namespace BlazorWebApi.Domain.Entities
 {
     public class Owners
     {
-
-        public int ID { get; set; }
         [Key]
-        public int OwneriD { get; set; }
+        public int ID { get; set; }
         [MaxLength(30)]
         public string Name { get; set; }
         [MaxLength(30)]

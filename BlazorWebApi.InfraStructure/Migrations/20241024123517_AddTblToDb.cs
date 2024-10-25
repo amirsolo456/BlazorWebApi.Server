@@ -71,8 +71,6 @@ namespace BlazorWebApi.InfraStructure.Migrations
                 name: "tblOwners",
                 columns: table => new
                 {
-                    OwneriD = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     ID = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     PhNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
@@ -81,7 +79,7 @@ namespace BlazorWebApi.InfraStructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tblOwners", x => x.OwneriD);
+                    table.PrimaryKey("PK_tblOwners", x => x.ID);
                 });
         }
 

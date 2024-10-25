@@ -20,5 +20,23 @@ namespace BlazorWebApi.Domain.Entities
         public int? VillaID { get; set; }
         public string Message { get; set; }
         public string SabtDate {  get; set; }
+        //[ForeignKey("Customer")]
+        //public int? CustomerId { get; set; }
+        //[ForeignKey("Owners")]
+        //public int? OwnerId { get; set; }
+        //[ForeignKey("Admin")]
+        //public int? AdminId { get; set; }
+        //public virtual Customer? customer { get; set; } = null;
+        //public virtual Owners? owners { get; set; } = null;
+        //public virtual Admin? admin { get; set; } = null;
+        public  string TypeName
+        {
+            get
+            {
+                if (Type == 0) return "مشتری";
+                else if (Type == 1) return "مالک";
+                else return "ادمین";
+            }
+        }
     }
 }

@@ -1,0 +1,90 @@
+﻿@inject HttpClient _httpclient
+@inject NavigationManager _navigate
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <EditForm Model="@message" OnValidSubmit="AddMessage">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="form-group">
+                    <label>انتخاب ویلا</label>
+
+                    <InputSelect id="VillasCombo" @bind-Value="message.VillaID">
+                        @if (AllVillas is not null)
+                        {
+                            foreach (Villa item in AllVillas)
+                            {
+                                <option value="@item.ID">@item.Name</option>
+                            }
+                        }
+                    </InputSelect>
+
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price" for="VillaPrice">متن پیام</label>
+                    <InputTextArea @bind-Value="message.Message" class="form-control" id="price" />
+                </div>
+                <button type="submit">ایجاد ویلا</button>
+            </EditForm>
+        </div>
+
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public int Type { get; set; }
+    [Parameter]
+    public int ID { get; set; }
+    [Parameter]
+    public int? IDRecieve { get; set; } = 0;
+    public Messages message = new Messages();
+    public IEnumerable<Villa>? AllVillas { get; set; }
+}
+@functions {
+
+    protected override async Task OnInitializedAsync()
+    {
+        AllVillas = await _httpclient.GetFromJsonAsync<IEnumerable<Villa>>("/api/Villa");
+        base.OnInitializedAsync();
+    }
+    public async void AddMessage()
+    {
+        if (message is not null)
+        {
+            Messages NewMessage= new()
+            {
+                    IDSend = ID,
+                    Message = message.Message,
+                    SabtDate = DateTime.Now.ToString().Substring(0, 20),
+                    VillaID = 40,
+                    Type = Type
+            };
+
+            if (IDRecieve != null && IDRecieve != 0)
+                NewMessage.IDRecieve = IDRecieve;
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "/api/Messages");
+            request.Content = new StringContent
+                (
+                    JsonSerializer.Serialize(NewMessage), Encoding.UTF8, "application/json");
+
+            var response = await _httpclient.SendAsync(request);
+
+            // var response = _HttpClient.PostAsJsonAsync("/api/Villa", villa);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("ویلا با موفقیت ایجاد شد!");
+                _navigate.NavigateTo("/AdminMessages");
+            }
+            else
+            {
+                Console.WriteLine("خطا در ایجاد ویلا.");
+            }
+        }
+    }
+}

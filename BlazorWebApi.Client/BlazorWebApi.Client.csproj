@@ -28,8 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Layout\" />
     <Folder Include="Pages\CustomerPages\" />
+    <Folder Include="Pages\CustomerPages\" />
+    <Folder Include="Pages\OwnerPages\" />
     <Folder Include="Pages\OwnerPages\" />
     <Folder Include="Shared\Customert\" />
     <Folder Include="Shared\Owner\" />

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlazorWebApi.Domain.Entities.Admin
+namespace BlazorWebApi.Domain.Entities
 {
     public class Admin
     {

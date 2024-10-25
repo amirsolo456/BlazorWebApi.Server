@@ -16,15 +16,15 @@ namespace BlazorWebApi.Server.Controllers
         }
 
         [HttpGet("{Includeprop}")]
-        public IEnumerable<Customer> Get(bool Includeprop=false)
+        public IEnumerable<Customer> Get(bool Includeprop = false)
         {
             return _CustomerService.GetAll(Includeprop);
         }
 
         [HttpGet("{ID},{Includeprop}")]
-        public Customer GetByID(int ID,bool Includeprop = false)
+        public Customer GetByID(int ID, bool Includeprop = false)
         {
-            return _CustomerService.GetByID(ID,Includeprop);
+            return _CustomerService.GetByID(ID, Includeprop);
         }
 
         [HttpGet]

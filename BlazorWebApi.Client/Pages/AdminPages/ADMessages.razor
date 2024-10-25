@@ -1,45 +1,96 @@
 ﻿@page "/AdminMessages"
+@using BlazorWebApi.Client.Components
+@layout BlazorWebApi.Client.Shared.Admin.AdminLayout
 @inject HttpClient _httpclient
+
 <div>
-    <table>
+    <a href="/ADCreateMessage">
+        <button type="submit" class="btn btn-outline-secondary">
+        </button>
+    </a>
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
+                @foreach (TableHeaderName header in TableHeaderNames)
+                {
+                    <th colspan="@header.Colspan">
+                        @header.Name
+                    </th>
+                }
+
             </tr>
         </thead>
         <tbody>
-            @if (Messages is not null)
+            @foreach (Msg item in Msgs)
             {
-                @foreach (Messages item in Messages)
-                {
-                    <tr id="@item.ID">
-                        <td>
-                            @item.Message
-                        </td>
-                        <td>
-                            @item.IDSend
-                        </td>
-                        <td>
-                            @item.SabtDate
-                        </td>
-                        <td>
-                            @if (item.VillaID is not null)
-                                @item.VillaID
-                            else
+                <tr id="@item.messagerow.ID">
+                    <td colspan="@TableHeaderNames[0].Colspan">
+                        @item.messagerow.ID
+                    </td>
+                    <td colspan="@TableHeaderNames[1].Colspan">
+                        @item.messagerow.Message
+                    </td>
+                    <td colspan="@TableHeaderNames[2].Colspan">
+                        @if (@item.adminrow != null)
+                        {
+                            <span>@item.adminrow.FLName</span>
+                        }
+                        else
+                        {
+                            <span> a</span>
+                        }
+                    </td>
+
+                    <td colspan="@TableHeaderNames[3].Colspan">
+                        @item.messagerow.SabtDate
+                    </td>
+
+                    <td colspan="@TableHeaderNames[4].Colspan">
+                        @item.messagerow.VillaID
+                    </td>
+                    <td colspan="@TableHeaderNames[5].Colspan">
+                        <button @onclick="ShowPartial" type="submit" class="btn btn-outline-secondary">
+                            پاسخ
+                        </button>
+                        <div class="table-bordered" style="border">
+                            @if (showPartial)
                             {
-
+                                <BlazorWebApi.Client.Shared.CreateMessage ID="@item.adminrow.ID" Type="@item.messagerow.Type" IDRecieve="@item.messagerow.IDSend" />
                             }
-                        </td>
-                    </tr>
-                }
-
+                        </div>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 
+
 </div>
 
 @code {
-    public IEnumerable<Messages> Messages { get; set; }
+    public IEnumerable<Messages> messages { get; set; }
+    public IEnumerable<Customer> customers { get; set; }
+    public IEnumerable<Owners> owner { get; set; }
+    public IEnumerable<Admin> admin { get; set; }
+
+    public bool showPartial = false;
+    List<TableHeaderName> TableHeaderNames = new()
+    {
+        new TableHeaderName("کد",1),
+        new TableHeaderName("پیام",2),
+        new TableHeaderName("ارسال کننده",1),
+        new TableHeaderName("تاریخ ثبت",1),
+        new TableHeaderName("کد ویلا",1),
+         new TableHeaderName(" ",1),
+    };
+
+    public class Msg()
+    {
+        public Messages messagerow { get; set; }
+        public Admin? adminrow { get; set; }
+    }
+
+    List<Msg> Msgs = new List<Msg>();
 }
 
 @functions {
@@ -47,14 +98,33 @@
     {
         try
         {
-            Messages = await _httpclient.GetFromJsonAsync<IEnumerable<Messages>>("/api/Messages");
-        }
-        catch (Exception)
-        {
+            messages = await _httpclient.GetFromJsonAsync<IEnumerable<Messages>>("/api/Messages");
+            customers = await _httpclient.GetFromJsonAsync<IEnumerable<Customer>>("/api/Customer/false");
+            owner = await _httpclient.GetFromJsonAsync<IEnumerable<Owners>>("/api/Owner");
+            admin = await _httpclient.GetFromJsonAsync<IEnumerable<Admin>>("/api/Admin");
 
-            throw;
+            foreach (Messages item in messages)
+            {
+                Msg a = new()
+                    {
+                        messagerow = item,
+                        adminrow = (admin.Where(c => c.ID == @item.IDSend) != null ? admin.Where(c => c.ID == @item.IDSend).First() : null)
+                    };
+
+                Msgs.Add(a);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
 
         base.OnInitializedAsync();
+    }
+
+    void ShowPartial()
+    {
+        showPartial = true;
     }
 }

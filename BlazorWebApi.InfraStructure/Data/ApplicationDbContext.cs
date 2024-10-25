@@ -1,5 +1,4 @@
 ﻿using BlazorWebApi.Domain.Entities;
-using BlazorWebApi.Domain.Entities.Admin;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;

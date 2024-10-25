@@ -19,6 +19,9 @@ builder.Services.AddScoped<IVillaService, VillaService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IMessagesService, MessagesService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IOwnerService, OwnerService>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Host.UseSerilog((hb, lc) => lc.ReadFrom.Configuration(hb.Configuration));
 
