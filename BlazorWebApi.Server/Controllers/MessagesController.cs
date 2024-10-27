@@ -1,5 +1,6 @@
 ﻿using BlazorWebApi.Application.Services;
 using BlazorWebApi.Domain.Entities;
+using BlazorWebApi.Domain.Entities.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +17,12 @@ namespace BlazorWebApi.Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Messages> GetAll()
+        public IEnumerable<MessageReplays> GetAll()
         {
-            return _MessagesService.GetAll();
+            return _MessagesService.GetCustomerMsgByReplay();
         }
+
+
 
         [HttpGet("Customer/{CustomerID}")]
         public IEnumerable<Messages> getByCustomerID(int CustomerID)

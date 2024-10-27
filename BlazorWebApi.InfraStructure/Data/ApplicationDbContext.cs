@@ -1,4 +1,5 @@
 ﻿using BlazorWebApi.Domain.Entities;
+using BlazorWebApi.Domain.Entities.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
@@ -18,7 +19,11 @@ namespace BlazorWebApi.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<OnvanList>().HasData(
+            new OnvanList { ID = 0, IDType = 1, Onvan = "مشتری" },
+            new OnvanList { ID = 1, IDType = 1, Onvan = "مالک" },
+            new OnvanList { ID = 2, IDType = 1, Onvan = "ادمین" }
+            );
         }
 
         public DbSet<Villa> tblVillas { get; set; }
@@ -29,5 +34,6 @@ namespace BlazorWebApi.Infrastructure.Data
         public DbSet<Booking> tblBokking { get; set; }
         public DbSet<Admin> tblAdmin { get; set; }
         public DbSet<Messages> tblMessages { get; set; }
+        public DbSet<OnvanList> tblOnvanList { get; set; }
     }
 }

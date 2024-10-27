@@ -27,7 +27,7 @@
                     <label asp-for="Price" for="VillaPrice">متن پیام</label>
                     <InputTextArea @bind-Value="message.Message" class="form-control" id="price" />
                 </div>
-                <button type="submit">ایجاد ویلا</button>
+                <button type="submit">ارسال جواب</button>
             </EditForm>
         </div>
 
@@ -39,9 +39,12 @@
     [Parameter]
     public int Type { get; set; }
     [Parameter]
-    public int ID { get; set; }
+    public int IDSend { get; set; }
     [Parameter]
     public int? IDRecieve { get; set; } = 0;
+    [Parameter]
+    public int? IDRefMessage { get; set; } = 0;
+
     public Messages message = new Messages();
     public IEnumerable<Villa>? AllVillas { get; set; }
 }
@@ -58,7 +61,8 @@
         {
             Messages NewMessage= new()
             {
-                    IDSend = ID,
+                    IDSend = IDSend,
+                    IDGroup = IDRefMessage.Value,
                     Message = message.Message,
                     SabtDate = DateTime.Now.ToString().Substring(0, 20),
                     VillaID = 40,

@@ -1,4 +1,5 @@
 ﻿using BlazorWebApi.Domain.Entities;
+using BlazorWebApi.Domain.Entities.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace BlazorWebApi.Application.Services
     public interface IMessagesService
     {
         public IEnumerable<Messages> GetAll();
+        public IEnumerable<MessageReplays> GetCustomerMsgByReplay();
         public IEnumerable<Messages> GetByCustomerID(int CustomerID);
         public IEnumerable<Messages> GetByOwnerID(int OwnerID);
         public int Count();
@@ -17,5 +19,5 @@ namespace BlazorWebApi.Application.Services
         public bool UpdateMessage(Messages messages);
         public bool DeleteMessage(int MessageID);
         public void SaveChanges();
-    } 
+    }
 }

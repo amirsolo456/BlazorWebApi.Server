@@ -1,10 +1,12 @@
 ﻿using BlazorWebApi.Application.Services;
 using BlazorWebApi.Domain.Entities;
+using BlazorWebApi.Domain.Entities.Shared;
 using BlazorWebApi.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,12 +56,9 @@ namespace BlazorWebApi.InfraStructure.Repository
         public IEnumerable<Messages> GetAll()
         {
             return _Context.tblMessages.ToList();
-    //.Include(m => m.customer) // بارگذاری اطلاعات مشتری
-    //.Include(m => m.owners)   // بارگذاری اطلاعات مالک
-    //.Include(m=>m.admin)
-    //.ToList();
-           // return _Context.tblMessages.ToList();
+
         }
+
 
         public IEnumerable<Messages> GetByCustomerID(int CustomerID)
         {
@@ -82,8 +81,45 @@ namespace BlazorWebApi.InfraStructure.Repository
         {
             int Type = 1;
             return _Context.tblMessages.Where(c => c.Type == Type && c.IDSend == OwnerID);
+        }
 
-            //return _Context.tblMessages.Include(b => b.owners).Where(c => c.Type == Type && c.IDSend == OwnerID);
+        public IEnumerable<MessageReplays> GetCustomerMsgByReplay()
+        {
+            IQueryable<Messages> query = _Context.tblMessages.AsQueryable();
+            var mainMessages = query.Where(c => c.IDGroup == 0).OrderBy(b => b.ID);
+
+            IEnumerable<MessageReplays> messagesWithReplies = mainMessages
+            .Select(mainMessage =>  new MessageReplays
+            {
+                message = mainMessage,
+                replays = query
+                .Where(reply => reply.IDGroup == mainMessage.ID)
+                 .OrderBy(reply => reply.ID)
+                 .ToList()
+            })
+                .ToList();
+
+            foreach (MessageReplays msg in messagesWithReplies)
+            {
+                if(msg.message.Type==0)
+                    msg.message.SenderName = _Context.tblCustomers.Where(c => c.ID == msg.message.IDSend).FirstOrDefault().FLName;
+                else if(msg.message.Type == 1)
+                    msg.message.SenderName = _Context.tblOwners.Where(c => c.ID == msg.message.IDSend).FirstOrDefault().Name;
+                else if (msg.message.Type == 2)
+                    msg.message.SenderName = _Context.tblAdmin.Where(c => c.ID == msg.message.IDSend).FirstOrDefault().FLName;
+
+                foreach (Messages replays in msg.replays)
+                {
+                    if (replays.Type == 0)
+                        replays.SenderName = _Context.tblCustomers.Where(c => c.ID == replays.IDSend).FirstOrDefault().FLName;
+                    else if (replays.Type == 1)
+                        replays.SenderName = _Context.tblOwners.Where(c => c.ID == replays.IDSend).FirstOrDefault().Name;
+                    else if (replays.Type == 2)
+                        replays.SenderName = _Context.tblAdmin.Where(c => c.ID == replays.IDSend).FirstOrDefault().FLName;
+                }
+
+            }
+            return messagesWithReplies;
         }
 
         public void SaveChanges()
@@ -99,7 +135,7 @@ namespace BlazorWebApi.InfraStructure.Repository
                 item.Message = messages.Message;
                 item.IDRecieve = messages.IDRecieve;
                 item.VillaID = messages.VillaID;
-                item.Type= messages.Type;
+                item.Type = messages.Type;
                 _Context.tblMessages.Update(item);
                 return true;
             }
