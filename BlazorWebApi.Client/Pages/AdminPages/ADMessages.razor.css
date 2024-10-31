@@ -1,0 +1,38 @@
+﻿.MessageFrom, #MessageFrom {
+    border: solid;
+    border-width: 2px;
+    border-color: rgba(128, 128, 128,0.5);
+}
+
+.radio-group {
+    position: absolute;
+    right: 200px;
+    top: 5px;
+    gap: 25px;
+    float: right;
+    /*margin-bottom: 15px;*/ /* فاصله از ComboBox */
+    margin-right:20px;
+    margin-top: 15px; /* فاصله از ComboBox */
+    display: flex; /* استفاده از Flexbox برای قرار دادن رادیو باتن‌ها در یک ردیف */
+}
+
+.MessageReplays {
+    background-color: rgba(234, 233, 222, 0.8);
+}
+
+.btnFont {
+    font-family: Tahoma;
+    font-size: 14px;
+}
+
+.btnSize {
+    width: 200px;
+    position: relative;
+    right: 30px;
+}
+
+.btnSize1 {
+    width: 100px;
+    position: relative;
+    right: 30px;
+}

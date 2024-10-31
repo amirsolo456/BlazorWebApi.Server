@@ -1,187 +1,199 @@
 ﻿@page "/AdminMessages"
-@using BlazorWebApi.Client.Components
-@using BlazorWebApi.Domain.Entities.Shared
-@layout BlazorWebApi.Client.Shared.Admin.AdminLayout
+@using System.Runtime.CompilerServices;
 @inject HttpClient _httpclient
-<style>
-    .navbar-custom {
-        margin-top: 50px; /* فاصله 50 پیکسل از بالا */
-        border: 1px solid #ccc; /* حاشیه برای Navbar */
-        background-color: #ffffff !important;
-        padding: 15px; /* Padding برای Navbar */
-    }
-
-    .custom-select {
-        height: 35px; /* افزایش ارتفاع ComboBox */
-        width: 200px; /* افزایش عرض ComboBox */
-        font-size: 16px; /* افزایش اندازه فونت */
-    }
-
-    .radio-group {
-        margin-top: 15px; /* فاصله از ComboBox */
-        margin-top: 15px; /* فاصله از ComboBox */
-        display: flex; /* استفاده از Flexbox برای قرار دادن رادیو باتن‌ها در یک ردیف */
-        gap: 20px; /* فاصله بین رادیو باتن‌ها */
-
-    }
-
-    .form-check {
-        display: flex; /* تنظیم رادیو باتن‌ها به صورت افقی */
-        align-items: center; /* تراز کردن رادیو باتن و لیبل */
-        margin-right: 20px;
-    }
-
-    .form-check-input {
-        margin-top: 0; /* جلوگیری از حرکت دایره به سمت بالا */
-        margin-right: 10px; /* فاصله بین دایره و متن */
-    }
-
-    .form-check-label {
-        margin-bottom: 0; /* جلوگیری از ایجاد فاصله اضافی در پایین */
-    }
 
 
-</style>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom" >
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="ms-auto">
-                <select class="form-select custom-select" @bind="selectedOption">
-                    <option value="option1">پیام های مشتری</option>
-                    <option value="option2">پیام های مالک </option>
-                </select>
-            </div>
-            <div class="ms-auto">
-                <div class="radio-group" style="margin-left:300px">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="options" id="option1" value="option1" checked>
-                        <label class="form-check-label" style="margin-right:25px" for="option1">
-                           خوانده نشده ها
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="options" id="option2" value="option2">
-                        <label class="form-check-label" style="margin-right:25px" for="option2">
-                           همه پیام ها
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="options" id="option3" value="option3">
-                        <label class="form-check-label" style="margin-right:25px" for="option3">
-                           پاسخ داده شده ها
-                        </label>
+<div id="MessageFrom" class="MessageFrom">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom" dir="rtl !important">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="ms-auto">
+                    <select class="form-select custom-select" @onchange="OnOptionChanged">
+                        <option value="option1">پیام های مشتری</option>
+                        <option value="option2">پیام های مالک </option>
+                    </select>
+                </div>
+                <div class="ms-auto">
+                    <div class="radio-group" style="margin-left:300px">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="options" id="option1" value="option1" @onclick="() => MessageFilter(1)" checked>
+                            <label class="form-check-label" style="margin-right:25px" for="option1">
+                                خوانده نشده ها
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="options" id="option2" value="option2" @onclick="() => MessageFilter(2)">
+                            <label class="form-check-label" style="margin-right:25px" for="option2">
+                                همه پیام ها
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="options" id="option3" value="option3" @onclick="() => MessageFilter(3)">
+                            <label class="form-check-label" style="margin-right:25px" for="option3">
+                                پاسخ داده شده ها
+                            </label>
+                        </div>
                     </div>
                 </div>
+
             </div>
-
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="container">
-    <a href="/ADCreateMessage">
-        <button type="submit" class="btn btn-outline-secondary">
-        </button>
-    </a>
-    <table class="table table-bordered table-striped" style="font-family:Tahoma ; font-size:14px">
-        <thead>
-            <tr>
-                @foreach (TableHeaderName header in TableHeaderNames)
-                {
-                    <th colspan="@header.Colspan">
-                        @header.Name
-                    </th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @if (messageReplays != null)
-            {
-                @foreach (MessageReplays item in messageReplays)
-                {
-                    <tr>
-                        <td colspan="@TableHeaderNames[0].Colspan">
-                            @item.message.ID
-                        </td>
-                        <td colspan="@TableHeaderNames[1].Colspan">
-                            @item.message
-                        </td>
-                        <td colspan="@TableHeaderNames[2].Colspan">
-                            @item.message.SenderName
-                        </td>
-                        <td colspan="@TableHeaderNames[3].Colspan">
-                            @item.message.SabtDate
-                        </td>
-                        <td colspan="@TableHeaderNames[4].Colspan">
-                            @if(item.message.VillaID != null)
-                                @item.message.VillaID
-                        </td>
-                        <td colspan="@TableHeaderNames[5].Colspan">
-                            <a>
-                                <button @onclick="() => ShowReplyForm(item.message.ID)">پاسخ</button>
-                            </a>
-                        </td>
+    <div class="container">
 
-                    </tr>
-                    if (item.replays != null)
+        <button class="btn btn-outline btnFont" @onclick="SendMessages">ارسال پیام</button>
+
+        <table class="table" style="font-family:Tahoma ; font-size:14px">
+            <thead>
+                <tr>
+                    @foreach (TableHeaderName header in TableHeaderNames)
                     {
-                        foreach (Messages replay in item.replays)
-                        {
-                            <tr>
-                                <td colspan="@TableHeaderNames[0].Colspan">
-                                    @replay.ID
-                                </td>
-                                <td colspan="@TableHeaderNames[1].Colspan">
-                                    @replay.Message
-                                </td>
-                                <td colspan="@TableHeaderNames[2].Colspan">
-                                    @replay.SenderName
-                                </td>
-
-                                <td colspan="@TableHeaderNames[3].Colspan">
-                                    @replay.SabtDate
-                                </td>
-                                <td colspan="@TableHeaderNames[4].Colspan">
-                                    @if (replay.VillaID != null)
-                                        @replay.VillaID
-                                </td>
-
-                                <td colspan="@TableHeaderNames[5].Colspan">
-                                </td>
-                                </tr>
-                        }
+                        <th colspan="@header.Colspan">
+                            @header.Name
+                        </th>
                     }
-
-                    if (replyVisible)
+                </tr>
+            </thead>
+            <tbody>
+                @if (messageReplays != null)
+                {
+                    @foreach (MessageReplays item in messageReplays)
                     {
                         <tr>
-                            <div class="row">
-                                <BlazorWebApi.Client.Shared.CreateMessage Type="2" IDRecieve="item.message.IDSend" IDRefMessage="item.message.ID" IDSend="AdminID" />
+                            <td colspan="@TableHeaderNames[0].Colspan">
+                                @item.message.ID
+                            </td>
+                            <td colspan="@TableHeaderNames[1].Colspan">
+                                @item.message
+                            </td>
+                            <td colspan="@TableHeaderNames[2].Colspan">
+                                @item.message.SenderName
+                            </td>
+                            <td colspan="@TableHeaderNames[3].Colspan">
+                                @item.message.SabtDate
+                            </td>
+                            <td colspan="@TableHeaderNames[4].Colspan">
+                                @if (item.message.VillaID != null)
+                                    @item.message.VillaID
 
-                            </div>
+
+
+
+
+
+
+
+
+                            </td>
+                            <td colspan="@TableHeaderNames[5].Colspan">
+                                <a>
+                                    <button class="btnFont btnSize btn btn-outline " @onclick="Openmodal">پاسخ</button>
+                                    <MessageModal @ref=messageModal IdRecieve="@item.message.IDSend" IdGroup="@item.message.ID" IdSend="2" IdSendType="2">
+                                        <span>
+                                            ارسال پاسخ
+                                        </span>
+                                    </MessageModal>
+
+                                </a>
+                            </td>
+
                         </tr>
+                        if (item.replays != null)
+                        {
+                            foreach (Messages replay in item.replays)
+                            {
+
+                                <tr id="@replay.ID" class="MessageReplays">
+
+                                    <td colspan="@TableHeaderNames[0].Colspan">
+                                        @replay.ID
+                                    </td>
+                                    <td colspan="@TableHeaderNames[1].Colspan">
+                                        @replay.Message
+                                    </td>
+                                    <td colspan="@TableHeaderNames[2].Colspan">
+                                        @replay.SenderName
+                                    </td>
+
+                                    <td colspan="@TableHeaderNames[3].Colspan">
+                                        @replay.SabtDate
+                                    </td>
+                                    <td colspan="@TableHeaderNames[4].Colspan">
+                                        @if (replay.VillaID != null)
+                                            @replay.VillaID
+
+
+
+                                    </td>
+
+                                    @if (replay.IDSend == AdminID)
+                                    {
+                                        <td colspan="1">
+                                            <button class="btnFont btnSize1 btn btn-outline" @onclick="() => OpenMessageDetail(replay.ID, replay.IDGroup)">ویرایش</button>
+                                            <BlazorWebApi.Client.Shared.MessageDetailModal @ref=messageDetailModal MessageID="@selectedMessageID" IDGroup="@selectedIDGroup">
+                                                <span>
+                                                    ویرایش
+                                                </span>
+                                            </BlazorWebApi.Client.Shared.MessageDetailModal>
+                                            <button class="btnFont btnSize1 btn btn-outline " @onclick="() => ShowReplyForm(item.message.ID)">حذف</button>
+
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td colspan="2">
+                                            <button class="btnFont btnSize btn btn-outline" @onclick="() => OpenMessageDetail(replay.ID, replay.IDGroup)">مشاهده</button>
+                                            <MessageDetailModal @ref=messageDetailModal MessageID="@selectedMessageID" IDGroup="@selectedIDGroup">
+                                                <span>
+                                                    مشاهده
+                                                </span>
+                                            </MessageDetailModal>
+                                        </td>
+                                    }
+
+                                </tr>
+                            }
+                        }
+
+                        if (replyVisible)
+                        {
+                            <tr>
+                                <div class="row">
+                                    <BlazorWebApi.Client.Shared.CreateMessage Type="2" IDRecieve="item.message.IDSend" IDRefMessage="item.message.ID" IDSend="AdminID" />
+                                </div>
+                            </tr>
+                        }
                     }
                 }
-            }
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 
 
 @code {
+    private int selectedMessageID;
+    private int selectedIDGroup;
+
+
+
     private string selectedOption = "option1"; // گزینه انتخاب شده
     private bool replyVisible = false; // وضعیت نمایش پارشیال
     private int selectedMessageId; // ID پیام انتخاب شده
 
-    public IEnumerable<MessageReplays> messageReplays { get; set; }
+    public bool sendmsg = false;
+    public IEnumerable<MessageReplays> messageReplays;
+    public IEnumerable<MessageReplays> AllMessages;
 
-    public int AdminID = 2;
+    public int Type = 0;
+    public static int AdminID = 2;
 
     List<TableHeaderName> TableHeaderNames = new()
     {
@@ -195,18 +207,148 @@
 }
 
 @functions {
+
     protected override async Task OnInitializedAsync()
+    {
+        MessagesByCustomer();
+
+        await base.OnInitializedAsync();
+    }
+
+    private void MessageFilter(int option)
+    {
+        Console.WriteLine(option.ToString());
+        if (option == 1)
+        {
+            messageReplays = AllMessages.AsQueryable().Where(c => c.message.OnRead == false);
+
+        }
+        else if (option == 2)
+        {
+            messageReplays = AllMessages.AsQueryable();
+        }
+        else if (option == 3)
+        {
+            messageReplays = AllMessages.AsQueryable().Where(c => c.replays.Count() > 0);
+        }
+    }
+
+
+    private void OnOptionChanged(ChangeEventArgs e)
     {
         try
         {
-            messageReplays = await _httpclient.GetFromJsonAsync<IEnumerable<MessageReplays>>("/api/Messages");
+            selectedOption = e.Value.ToString();
+            Console.WriteLine($"Selected Value: {selectedOption}");
+            Console.WriteLine(selectedOption);
+            if (selectedOption == "option1")
+            {
+                MessagesByCustomer();
+            }
+            else if (selectedOption == "option2")
+            {
+                MessagedByOwner();
+            }
+        }
+        catch (Exception)
+        {
+            Console.WriteLine(LogCurrentLine());
+        }
+
+    }
+
+    public string LogCurrentLine([CallerLineNumber] int lineNumber = 0)
+    {
+        Console.WriteLine($"Current line number: {lineNumber}");
+        return ($"Current line number: {lineNumber}");
+    }
+
+
+    async void MessagedByOwner()
+    {
+        try
+        {
+            AllMessages = await _httpclient.GetFromJsonAsync<IEnumerable<MessageReplays>>("/api/Messages/OwnerRep");
+            messageReplays = AllMessages;
+            Type = 1;
+            Console.WriteLine(LogCurrentLine());
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            Console.WriteLine(LogCurrentLine());
+        }
+    }
+
+
+    private async void OpenMessageDetail(int messageId, int idGroup)
+    {
+        selectedMessageID = messageId;
+        selectedIDGroup = idGroup;
+        Console.WriteLine(selectedMessageID + "," + selectedIDGroup);
+        if (messageDetailModal != null)
+        {
+            messageDetailModal.IDGroup = idGroup;
+            messageDetailModal.MessageID = messageId;
+            await messageDetailModal.OpenModal();
+        }
+    }
+
+    public void SendMessages()
+    {
+        try
+        {
+            sendmsg = true;
+            StateHasChanged();
         }
         catch (Exception ex)
         {
-            Console.WriteLine("خطا:" + ex.Message);
+            Console.WriteLine(ex.Message);
         }
 
-        base.OnInitializedAsync();
+    }
+
+    async void MessagesByCustomer()
+    {
+        try
+        {
+            AllMessages = await _httpclient.GetFromJsonAsync<IEnumerable<MessageReplays>>("/api/Messages/CustomerRep");
+            Console.WriteLine("ok");
+            messageReplays = AllMessages.AsQueryable();
+
+            Console.WriteLine("ok");
+            Type = 0;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Notok");
+            Console.WriteLine(LogCurrentLine());
+        }
+    }
+
+    async void FilterByUnread()
+    {
+        try
+        {
+            messageReplays = AllMessages.Where(f => f.message.OnRead == false && f.message.Type == Type);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(LogCurrentLine());
+        }
+    }
+
+    async void FilterByReplays()
+    {
+        try
+        {
+            messageReplays = AllMessages.Where(f => f.message.Type == Type && f.replays.Count() > 0);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(LogCurrentLine());
+        }
     }
 
     private void ShowReplyForm(int messageId)
@@ -226,13 +368,13 @@
         {
 
         }
-        else if(Type == 1)
+        else if (Type == 1)
         {
 
         }
-        else if(Type == 2)
+        else if (Type == 2)
         {
-            
+
         }
     }
 }

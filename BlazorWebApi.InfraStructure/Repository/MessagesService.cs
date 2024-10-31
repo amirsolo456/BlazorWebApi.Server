@@ -14,6 +14,7 @@ namespace BlazorWebApi.InfraStructure.Repository
 {
     public class MessagesService : IMessagesService
     {
+        public int MyProperty { get; set; }
         private ApplicationDbContext _Context;
         public MessagesService(ApplicationDbContext Context)
         {
@@ -66,15 +67,29 @@ namespace BlazorWebApi.InfraStructure.Repository
             IQueryable<Messages> query = _Context.tblMessages.AsQueryable();
             return query.Where(c => c.Type == Type && c.IDSend == CustomerID).Select(m => new Messages
             {
-                //customer = _Context.tblCustomers.Where(c => c.ID == CustomerID).FirstOrDefault(),
                 Message = m.Message,
                 IDRecieve = m.IDRecieve,
-                //owners = null,
                 VillaID = m.VillaID,
                 SabtDate = m.SabtDate,
                 IDSend = m.IDSend,
                 Type = Type,
             });
+        }
+
+        public Messages GetByID(int ID)
+        {
+            var item = _Context.tblMessages.Where(C => C.ID == ID).FirstOrDefault();
+            if (item != null)
+            {
+                if (item.Type == 0)
+                    item.SenderName = _Context.tblCustomers.Where(c => c.ID == item.IDSend).FirstOrDefault().FLName;
+                else if (item.Type == 1)
+                    item.SenderName = _Context.tblOwners.Where(c => c.ID == item.IDSend).FirstOrDefault().Name;
+                else if (item.Type == 2)
+                    item.SenderName = _Context.tblAdmin.Where(c => c.ID == item.IDSend).FirstOrDefault().FLName;
+            }
+
+            return item;
         }
 
         public IEnumerable<Messages> GetByOwnerID(int OwnerID)
@@ -85,11 +100,59 @@ namespace BlazorWebApi.InfraStructure.Repository
 
         public IEnumerable<MessageReplays> GetCustomerMsgByReplay()
         {
+            try
+            {
+                IQueryable<Messages> query = _Context.tblMessages.AsQueryable();
+                var mainMessages = query.Where(c => c.IDGroup == 0).OrderBy(b => b.ID);
+
+                IEnumerable<MessageReplays> messagesWithReplies = mainMessages
+                .Select(mainMessage => new MessageReplays
+                {
+                    message = mainMessage,
+                    replays = query
+                    .Where(reply => reply.IDGroup == mainMessage.ID)
+                     .OrderBy(reply => reply.ID)
+                     .ToList()
+                })
+                    .ToList();
+
+                foreach (MessageReplays msg in messagesWithReplies)
+                {
+                    if (msg.message.Type == 0)
+                        msg.message.SenderName = _Context.tblCustomers.Where(c => c.ID == msg.message.IDSend).FirstOrDefault().FLName;
+                    else if (msg.message.Type == 1)
+                        msg.message.SenderName = _Context.tblOwners.Where(c => c.ID == msg.message.IDSend).FirstOrDefault().Name;
+                    else if (msg.message.Type == 2)
+                        msg.message.SenderName = _Context.tblAdmin.Where(c => c.ID == msg.message.IDSend).FirstOrDefault().FLName;
+
+                    foreach (Messages replays in msg.replays)
+                    {
+                        if (replays.Type == 0)
+                            replays.SenderName = _Context.tblCustomers.Where(c => c.ID == replays.IDSend).FirstOrDefault().FLName;
+                        else if (replays.Type == 1)
+                            replays.SenderName = _Context.tblOwners.Where(c => c.ID == replays.IDSend).FirstOrDefault().Name;
+                        else if (replays.Type == 2)
+                            replays.SenderName = _Context.tblAdmin.Where(c => c.ID == replays.IDSend).FirstOrDefault().FLName;
+                    }
+
+                }
+                return messagesWithReplies;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+                return null;
+            }
+
+        }
+
+        public IEnumerable<MessageReplays> GetMssagesByCustomer()
+        {
             IQueryable<Messages> query = _Context.tblMessages.AsQueryable();
-            var mainMessages = query.Where(c => c.IDGroup == 0).OrderBy(b => b.ID);
+            var mainMessages = query.Where(c => c.IDGroup == 0 && c.Type == 0).OrderBy(b => b.ID);
 
             IEnumerable<MessageReplays> messagesWithReplies = mainMessages
-            .Select(mainMessage =>  new MessageReplays
+            .Select(mainMessage => new MessageReplays
             {
                 message = mainMessage,
                 replays = query
@@ -101,13 +164,8 @@ namespace BlazorWebApi.InfraStructure.Repository
 
             foreach (MessageReplays msg in messagesWithReplies)
             {
-                if(msg.message.Type==0)
-                    msg.message.SenderName = _Context.tblCustomers.Where(c => c.ID == msg.message.IDSend).FirstOrDefault().FLName;
-                else if(msg.message.Type == 1)
-                    msg.message.SenderName = _Context.tblOwners.Where(c => c.ID == msg.message.IDSend).FirstOrDefault().Name;
-                else if (msg.message.Type == 2)
-                    msg.message.SenderName = _Context.tblAdmin.Where(c => c.ID == msg.message.IDSend).FirstOrDefault().FLName;
 
+                msg.message.SenderName = _Context.tblCustomers.Where(c => c.ID == msg.message.IDSend).FirstOrDefault().FLName;
                 foreach (Messages replays in msg.replays)
                 {
                     if (replays.Type == 0)
@@ -119,6 +177,39 @@ namespace BlazorWebApi.InfraStructure.Repository
                 }
 
             }
+            return messagesWithReplies;
+        }
+
+        public IEnumerable<MessageReplays> GetMssagesByOwner()
+        {
+            IQueryable<Messages> query = _Context.tblMessages.AsQueryable();
+            var mainMessages = query.Where(c => c.IDGroup == 0 && c.Type == 1).OrderBy(b => b.ID);
+
+            IEnumerable<MessageReplays> messagesWithReplies = mainMessages
+            .Select(mainMessage => new MessageReplays
+            {
+                message = mainMessage,
+                replays = query
+                .Where(reply => reply.IDGroup == mainMessage.ID)
+                 .OrderBy(reply => reply.ID)
+                 .ToList()
+            })
+                .ToList();
+
+            foreach (MessageReplays msg in messagesWithReplies)
+            {
+                msg.message.SenderName = _Context.tblOwners.Where(c => c.ID == msg.message.IDSend).FirstOrDefault().Name;
+                foreach (Messages replays in msg.replays)
+                {
+                    if (replays.Type == 0)
+                        replays.SenderName = _Context.tblCustomers.Where(c => c.ID == replays.IDSend).FirstOrDefault().FLName;
+                    else if (replays.Type == 1)
+                        replays.SenderName = _Context.tblOwners.Where(c => c.ID == replays.IDSend).FirstOrDefault().Name;
+                    else if (replays.Type == 2)
+                        replays.SenderName = _Context.tblAdmin.Where(c => c.ID == replays.IDSend).FirstOrDefault().FLName;
+                }
+            }
+
             return messagesWithReplies;
         }
 

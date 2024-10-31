@@ -12,18 +12,20 @@ namespace BlazorWebApi.Domain.Entities
     {
         [Key]
         public int ID { get; set; }
-        [Range(0,10)]
+        [Range(0, 10)]
         public int IDGroup { get; set; }
         public int Type { get; set; }
         public int IDSend { get; set; }
         public int? IDRecieve { get; set; }
+        public int? TypeRecieve { get; set; }
         [ForeignKey("Villa"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int? VillaID { get; set; }
         public string Message { get; set; }
-        public string SabtDate {  get; set; }
+        public string SabtDate { get; set; }
         [NotMapped]
         public string SenderName { get; set; }
-        public  string TypeName
+        public bool OnRead { get; set; } = false;
+        public string TypeName
         {
             get
             {

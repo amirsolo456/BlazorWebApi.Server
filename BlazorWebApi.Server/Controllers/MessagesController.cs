@@ -17,12 +17,28 @@ namespace BlazorWebApi.Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<MessageReplays> GetAll()
+        public IEnumerable<Messages> GetAll()
+        {
+            return _MessagesService.GetAll();
+        }
+
+        [HttpGet("ByID/{id}")]
+        public Messages GetByID(int id)
+        {
+            return _MessagesService.GetByID(id);
+        }
+
+        [HttpGet("OwnerRep")]
+        public IEnumerable<MessageReplays> GetOwnersMessages()
+        {
+            return _MessagesService.GetMssagesByOwner();
+        }
+
+        [HttpGet("CustomerRep")]
+        public IEnumerable<MessageReplays> GetCustomersMessages()
         {
             return _MessagesService.GetCustomerMsgByReplay();
         }
-
-
 
         [HttpGet("Customer/{CustomerID}")]
         public IEnumerable<Messages> getByCustomerID(int CustomerID)

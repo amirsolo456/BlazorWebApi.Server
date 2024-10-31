@@ -1,0 +1,115 @@
+﻿@inject HttpClient _httpclient
+<script src="ModalJs.js"></script>
+
+<div class="modal fade" id="@id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">@ChildContent</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <EditForm Model="message" OnValidSubmit="Submit">
+                    <div class="mb-3">
+                        @if (admin != null)
+                        {
+                            <label class="form-label">فرستنده</label>
+                            <div class="form-text">@admin.FLName</div>
+                        }
+                        @if (customer != null)
+                        {
+                            <label class="form-label">گیرنده</label>
+                            <div class="form-text">@customer.FLName</div>
+                        }
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="message">متن پیام را وارد کنید</label>
+                        <InputTextArea id="message" @bind-Value="@message.Message" class="form-control" rows="4"></InputTextArea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">ارسال</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                    </div>
+                </EditForm>
+
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public int IdRecieve { get; set; }
+    [Parameter]
+    public int IdSend { get; set; }
+    [Parameter]
+    public int IdSendType { get; set; }
+    [Parameter]
+    public int IdGroup { get; set; }
+
+    public Messages message { get; set; } = new Messages();
+    public BlazorWebApi.Domain.Entities.Admin? admin { get; set; }
+    public Customer? customer { get; set; }
+}
+
+@functions {
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            admin = await _httpclient.GetFromJsonAsync<BlazorWebApi.Domain.Entities.Admin>("/api/Admin/" + IdSend);
+            customer = await _httpclient.GetFromJsonAsync<Customer>("/api/Customer/" + IdRecieve + ",false");
+            Console.WriteLine("SUCCESS");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+    public async void Submit()
+    {
+        try
+        {
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "/api/Messages");
+            request.Content = new StringContent(
+                JsonSerializer.Serialize(
+                    new Messages
+                        {
+                            IDGroup = IdGroup,
+                            IDRecieve = IdRecieve,
+                            IDSend = IdSend,
+                            Type = IdSendType,
+                            OnRead = false,
+                            SabtDate = "1403/08/10".ToString(),
+                            VillaID = 40,
+                            SenderName = "sad",
+                             Message=message.Message
+
+                        }), Encoding.UTF8, "application/json"
+            );
+
+            var response = await _httpclient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("SUCCESS");
+                StateHasChanged();
+            }
+            else Console.WriteLine("FAILED");
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+    }
+}

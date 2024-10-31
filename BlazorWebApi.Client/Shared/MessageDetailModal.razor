@@ -1,0 +1,105 @@
+﻿@inject HttpClient _httpclient
+<script src="ModalCom.js"></script>
+
+<div class="modal fade" id="@Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">@(ChildContent != null ? ChildContent : " ")</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <EditForm Model="replay" OnValidSubmit="Submit">
+                    <div class="mb-3">
+                        @if (replay != null)
+                        {
+                            <label class="form-label">فرستنده</label>
+                            <div class="form-text">@replay.SenderName</div>
+
+
+                            <label class="form-label">گیرنده</label>
+                            <div class="form-text">@RecieveName</div>
+                        }
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="replay">متن پیام را وارد کنید</label>
+                        <InputTextArea id="replay" @bind-Value="@replay.Message" class="form-control" rows="4" readonly="@(replay.IDSend != 2 && replay.Type !=2)"></InputTextArea>
+                    </div>
+
+                    <div class="modal-footer">
+                        @if (replay.IDSend == 2 && replay.Type == 2)
+                        {
+                            Console.WriteLine(replay.IDSend.ToString() + "," + replay.Type.ToString());
+                            <button type="submit" class="btn btn-primary">ارسال</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">بستن</button>
+                        }
+                    </div>
+                </EditForm>
+
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // [Parameter]
+    // public int? MessageID { get; set; }
+    // [Parameter]
+    // public int? IDGroup { get; set; }
+
+    private Messages replay = new Messages();
+    public string RecieveName = "a";
+}
+
+@functions {
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            if (this.MessageID != null && this.MessageID > 0)
+                replay = await _httpclient.GetFromJsonAsync<Messages>("/api/Messages/ByID/" + this.MessageID);
+
+            if (this.IDGroup != null && this.IDGroup>0)
+            {
+                var msg = await _httpclient.GetFromJsonAsync<Messages>("/api/Messages/ByID/" + this.IDGroup);
+                if (msg.SenderName != null)
+                    RecieveName = msg.SenderName;
+            }
+
+            StateHasChanged();
+            await base.OnInitializedAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("خطا" + ex.Message);
+        }
+
+    }
+
+    public async void Submit()
+    {
+        try
+        {
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Put, "/api/Messages");
+            requestMessage.Content = new StringContent(JsonSerializer.Serialize(replay), Encoding.UTF8, "application/json");
+            var response = await _httpclient.SendAsync(requestMessage);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("SUCCESS");
+            }
+            else Console.WriteLine("FAILED");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+    }
+}

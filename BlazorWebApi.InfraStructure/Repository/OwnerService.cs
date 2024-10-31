@@ -11,6 +11,7 @@ namespace BlazorWebApi.InfraStructure.Repository
 {
     public class OwnerService : IOwnerService
     {
+        public int MyProperty { get; set; }
         private ApplicationDbContext _Context;
         public OwnerService(ApplicationDbContext Context)
         {
