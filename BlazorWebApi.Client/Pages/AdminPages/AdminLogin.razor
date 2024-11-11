@@ -1,0 +1,75 @@
+﻿@page "/AdminLogin"
+@inject NavigationManager _navigate
+@inject HttpClient _httpclient
+
+<div class="login-container">
+    <h2>ورود به پنل ادمین</h2>
+    <EditForm Model="admin" OnValidSubmit="HandleLogin">
+@*         <DataAnnotationsValidator />
+        <ValidationSummary /> *@
+
+        <div class="form-group">
+            <label for="username">نام کاربری:</label>
+            <InputText id="username" @bind-Value="admin.UserName"  class="form-control" />
+@*             <ValidationMessage For="@(() => admin.UserName)" />
+ *@        </div>
+
+        <div class="form-group">
+            <label for="password">رمز عبور:</label>
+            <InputText id="password" @bind-Value="admin.Password" type="password" class="form-control" />
+@*             <ValidationMessage For="@(() => admin.Password)" />
+ *@        </div>
+
+        <button type="submit" class="btn btn-primary">ورود</button>
+    </EditForm>
+</div>
+
+@code {
+    public Admin admin = new Admin();
+    private LoginModel loginModel = new LoginModel();
+
+    private async Task HandleLogin()
+    {
+        try
+        {
+            Console.WriteLine(admin.UserName);
+            Console.WriteLine(admin.Password);
+            Admin? user = await _httpclient.GetFromJsonAsync<Admin?>("/api/Admin/" + admin.UserName + "," + admin.Password);
+            if (user == null)
+            {
+                Console.WriteLine("یوزرنیم یا پسوورد اشتباه است");
+            }
+            else
+            {
+                Console.WriteLine("خوش آمدید");
+                _navigate.NavigateTo("/AdminMessages");
+            }
+        }
+        catch (Exception)
+        {
+            
+            throw;
+        }
+        // پیاده‌سازی منطق احراز هویت
+        // مثال: اگر نام کاربری و رمز عبور درست باشند
+        // if (loginModel.Username == "admin" && loginModel.Password == "password")
+        // {
+        //     // ورود موفق
+        //     // مثال: ناوبری به صفحه اصلی ادمین
+        //     _navigate.NavigateTo("/admin-dashboard");
+        // }
+        // else
+        // {
+        //     // نمایش پیام خطا
+        // }
+    }
+
+    public class LoginModel
+    {
+        // [Required(ErrorMessage = "نام کاربری الزامی است.")]
+        // public string Username { get; set; }
+
+        // [Required(ErrorMessage = "رمز عبور الزامی است.")]
+        // public string Password { get; set; }
+    }
+}

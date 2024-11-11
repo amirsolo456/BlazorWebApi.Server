@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebApi.Domain", "Blaz
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClassLibrarryies", "ClassLibrarryies", "{754745E3-869E-4F77-8E72-AE3E664D38A8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebApi.MobileClient", "BlazorWebApi.MobileClient\BlazorWebApi.MobileClient.csproj", "{1F5E4D4D-8247-4ED5-BF73-D42B2B5AD6E6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebApi.SharedComponents", "BlazorWebApi.SharedComponents\BlazorWebApi.SharedComponents.csproj", "{843AEE50-B7F4-40B2-B26D-7CA7290047FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +45,16 @@ Global
 		{B8B126D1-2B72-4844-8BCA-A0BFB5247C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8B126D1-2B72-4844-8BCA-A0BFB5247C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8B126D1-2B72-4844-8BCA-A0BFB5247C6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F5E4D4D-8247-4ED5-BF73-D42B2B5AD6E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F5E4D4D-8247-4ED5-BF73-D42B2B5AD6E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F5E4D4D-8247-4ED5-BF73-D42B2B5AD6E6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1F5E4D4D-8247-4ED5-BF73-D42B2B5AD6E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F5E4D4D-8247-4ED5-BF73-D42B2B5AD6E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F5E4D4D-8247-4ED5-BF73-D42B2B5AD6E6}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{843AEE50-B7F4-40B2-B26D-7CA7290047FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{843AEE50-B7F4-40B2-B26D-7CA7290047FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{843AEE50-B7F4-40B2-B26D-7CA7290047FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{843AEE50-B7F4-40B2-B26D-7CA7290047FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +63,7 @@ Global
 		{1FE55733-092E-4CDA-9FED-1B3F1F3CBAA4} = {754745E3-869E-4F77-8E72-AE3E664D38A8}
 		{B7E45221-6620-47F4-9A1C-FEAD0025FF19} = {754745E3-869E-4F77-8E72-AE3E664D38A8}
 		{B8B126D1-2B72-4844-8BCA-A0BFB5247C6C} = {754745E3-869E-4F77-8E72-AE3E664D38A8}
+		{843AEE50-B7F4-40B2-B26D-7CA7290047FC} = {754745E3-869E-4F77-8E72-AE3E664D38A8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14035310-35CE-4E58-BF6B-67C28FA09257}

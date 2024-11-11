@@ -11,6 +11,7 @@ namespace BlazorWebApi.Application.Services
     {
         public IEnumerable<Admin> GetAll();
         public Admin GetByID(int ID);
+        public Admin GetByUserPassword(string Username, string Password);
         public int GetCount();
 
     }

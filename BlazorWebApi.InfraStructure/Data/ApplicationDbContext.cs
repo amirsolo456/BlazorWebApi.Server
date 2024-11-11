@@ -35,5 +35,6 @@ namespace BlazorWebApi.Infrastructure.Data
         public DbSet<Admin> tblAdmin { get; set; }
         public DbSet<Messages> tblMessages { get; set; }
         public DbSet<OnvanList> tblOnvanList { get; set; }
+        public DbSet<AdminLog> tblAdminLog { get; set; }
     }
 }

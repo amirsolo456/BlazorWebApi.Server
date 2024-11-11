@@ -23,7 +23,16 @@ namespace BlazorWebApi.InfraStructure.Repository
 
         public Admin GetByID(int ID)
         {
-            return _Context.tblAdmin.Where( c => c.ID == ID).FirstOrDefault();
+            return _Context.tblAdmin.Where(c => c.ID == ID).FirstOrDefault();
+        }
+
+        public Admin GetByUserPassword(string Username, string Password)
+        {
+            if (_Context.tblAdmin.Where(c => c.UserName.Trim() == Username.Trim() && c.Password.Trim() == Password.Trim()).Any())
+            {
+                return _Context.tblAdmin.Where(c => c.UserName.Trim() == Username.Trim() && c.Password.Trim() == Password.Trim()).FirstOrDefault();
+            }
+            else return new Admin();
         }
 
         public int GetCount()

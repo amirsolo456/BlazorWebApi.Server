@@ -20,13 +20,16 @@ namespace BlazorWebApi.Domain.Entities
 
         public bool CustomerManage { get; set; } = false;
         public string SabtDate { get; set; }
-
+        [Range(5,50)]
+        public string UserName {  get; set; }
+        [Range(5, 50)]
+        public string Password { get; set; }
         public Admin()
         {
             
         }
 
-        public Admin(int id, string Fame, string Lname, int access, bool OManager, bool CManager)
+        public Admin(int id, string Fame, string Lname, int access, bool OManager, bool CManager,string username,string password)
         {
             this.ID = id;
             this.FName = Fame;
@@ -36,6 +39,8 @@ namespace BlazorWebApi.Domain.Entities
             this.OwnerManage = OManager;
             this.CustomerManage = CManager;
             this.SabtDate = DateTime.Now.ToString();
+            this.UserName = username;
+            this.Password = password;
         }
     }
 }

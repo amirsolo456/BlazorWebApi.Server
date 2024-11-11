@@ -21,6 +21,7 @@
 	
   <ItemGroup>
     <ProjectReference Include="..\BlazorWebApi.Domain\BlazorWebApi.Domain.csproj" />
+    <ProjectReference Include="..\BlazorWebApi.SharedComponents\BlazorWebApi.SharedComponents.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -22,7 +22,7 @@ namespace BlazorWebApi.InfraStructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BlazorWebApi.Domain.Entities.Admin.Admin", b =>
+            modelBuilder.Entity("BlazorWebApi.Domain.Entities.Admin", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -60,20 +60,49 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     b.ToTable("tblAdmin");
                 });
 
-            modelBuilder.Entity("BlazorWebApi.Domain.Entities.Booking", b =>
+            modelBuilder.Entity("BlazorWebApi.Domain.Entities.AdminLog", b =>
                 {
-                    b.Property<int>("CustomerID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AdminId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IPAddress")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
+
+                    b.Property<DateTime>("LoginTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LogoutTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
+
+                    b.ToTable("tblAdminLog");
+                });
+
+            modelBuilder.Entity("BlazorWebApi.Domain.Entities.Booking", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("CustomerID")
+                        .HasColumnType("int");
 
                     b.Property<string>("EndDate")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ID")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsReserved")
                         .HasColumnType("bit");
@@ -94,7 +123,7 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     b.Property<int>("VillaID")
                         .HasColumnType("int");
 
-                    b.HasKey("CustomerID");
+                    b.HasKey("ID");
 
                     b.ToTable("tblBokking");
                 });
@@ -137,6 +166,9 @@ namespace BlazorWebApi.InfraStructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<int>("IDGroup")
+                        .HasColumnType("int");
+
                     b.Property<int?>("IDRecieve")
                         .HasColumnType("int");
 
@@ -147,11 +179,17 @@ namespace BlazorWebApi.InfraStructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("OnRead")
+                        .HasColumnType("bit");
+
                     b.Property<string>("SabtDate")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TypeRecieve")
                         .HasColumnType("int");
 
                     b.Property<int?>("VillaID")
@@ -164,14 +202,11 @@ namespace BlazorWebApi.InfraStructure.Migrations
 
             modelBuilder.Entity("BlazorWebApi.Domain.Entities.Owners", b =>
                 {
-                    b.Property<int>("OwneriD")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OwneriD"));
-
-                    b.Property<int>("ID")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -191,9 +226,46 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     b.Property<double>("Score")
                         .HasColumnType("float");
 
-                    b.HasKey("OwneriD");
+                    b.HasKey("ID");
 
                     b.ToTable("tblOwners");
+                });
+
+            modelBuilder.Entity("BlazorWebApi.Domain.Entities.Shared.OnvanList", b =>
+                {
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IDType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Onvan")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("tblOnvanList");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 0,
+                            IDType = 1,
+                            Onvan = "مشتری"
+                        },
+                        new
+                        {
+                            ID = 1,
+                            IDType = 1,
+                            Onvan = "مالک"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            IDType = 1,
+                            Onvan = "ادمین"
+                        });
                 });
 
             modelBuilder.Entity("BlazorWebApi.Domain.Entities.ShoppingCart", b =>
@@ -301,6 +373,17 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     b.HasIndex("VillaID");
 
                     b.ToTable("tblVillaNumbers");
+                });
+
+            modelBuilder.Entity("BlazorWebApi.Domain.Entities.AdminLog", b =>
+                {
+                    b.HasOne("BlazorWebApi.Domain.Entities.Admin", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
                 });
 
             modelBuilder.Entity("BlazorWebApi.Domain.Entities.ShoppingCart", b =>

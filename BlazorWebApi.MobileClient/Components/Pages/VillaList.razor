@@ -1,0 +1,39 @@
+﻿@page "/"
+@inject HttpClient _HttpClient
+@inject VillaListViewModel Villaviewmodel
+@using BlazorWebApi.Domain.Entities;
+@using BlazorWebApi.MobileClient.Components.ViewModel
+
+<div>
+    <div class="row">
+        
+        @if (Villaviewmodel.Villas != null && Villaviewmodel.Villas.Any())
+        {
+            @foreach (Villa item in Villaviewmodel.Villas)
+            {
+                <BlazorWebApi.MobileClient.Components.Shared.VillaItem villa="item" />
+            }
+        }
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await Villaviewmodel.LoadData();
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("خطا در هنگام گرفتن اطلاعات ویلا");
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+
+}
+

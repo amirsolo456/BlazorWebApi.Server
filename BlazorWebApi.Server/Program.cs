@@ -21,6 +21,7 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IMessagesService, MessagesService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IOwnerService, OwnerService>();
+builder.Services.AddScoped<IAdminLogService, AdminLogService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Host.UseSerilog((hb, lc) => lc.ReadFrom.Configuration(hb.Configuration));
@@ -29,7 +30,7 @@ builder.Services.AddCors(optyion =>
 {
     optyion.AddPolicy("BlazorWasm", policy =>
     {
-        policy.WithOrigins("https://localhost:7069")
+        policy.WithOrigins("https://localhost:6170")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -52,8 +53,6 @@ else
 }
 
 
-
-
 app.UseSerilogIngestion();
 app.UseSerilogRequestLogging();
 
@@ -68,5 +67,6 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 app.UseCors("BlazorWasm");
+app.UseCors("AllowMauiApp");
 app.UseCors("AllowAll");
 app.Run();

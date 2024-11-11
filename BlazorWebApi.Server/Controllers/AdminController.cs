@@ -22,6 +22,13 @@ namespace BlazorWebApi.Server.Controllers
             return _AdminService.GetAll();
         }
 
+        [HttpGet("{User},{Pass}")]
+        public Admin GetByUserPass(string User, string Pass)
+        {
+            return _AdminService.GetByUserPassword(User, Pass);
+        }
+            
+
         [HttpGet("{ID}")]
         public Admin GetByID(int ID)
         {

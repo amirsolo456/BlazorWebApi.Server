@@ -1,0 +1,124 @@
+﻿@* @inject IConfiguration _Configuration *@
+@inject HttpClient _httpClient
+<style>
+
+    /* پنهان کردن منوی ناوبری در حالت پیش‌فرض */
+    .nav-scrollable {
+        display: none;
+        background-color: #333; /* رنگ پس‌زمینه برای منو */
+        padding: 10px;
+        color: white;
+    }
+
+    /* زمانی که چک‌باکس فعال شود (یعنی دکمه کلیک شده)، منو نمایش داده می‌شود */
+    #navbar-toggler:checked ~ .nav-scrollable {
+        display: block;
+    }
+
+    /* استایل دکمه منو */
+    .navbar-toggler {
+        display: none; /* پنهان کردن چک‌باکس اصلی */
+    }
+
+    .navbar-toggler-icon {
+        display: inline-block;
+        cursor: pointer;
+        font-size: 24px;
+        color: white; /* رنگ آیکن */
+    }
+
+
+</style>
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">MauiApp1</a>
+
+        <!-- دکمه باز و بسته شدن منو -->
+        <input type="checkbox" id="navbar-toggler" class="navbar-toggler" title="Navigation menu" />
+        <label for="navbar-toggler" class="navbar-toggler-icon">&#9776;</label> <!-- آیکن سه خط -->
+    </div>
+</div>
+
+@* <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+ *@
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="counter">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="weather">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+            </NavLink>
+        </div>
+    </nav>
+</div>
+@* <div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">ویلا سرا</a>
+
+        <!-- دکمه باز و بسته شدن منو -->
+        <input type="checkbox" id="navbar-toggler" class="navbar-toggler" title="Navigation menu" />
+        <label for="navbar-toggler" class="navbar-toggler-icon">&#9776;</label> <!-- آیکن سه خط -->
+    </div>
+</div>
+
+<!-- منوی ناوبری که در حالت پیش‌فرض مخفی است -->
+<div class="nav-scrollable">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> خانه
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="counter">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> داشبورد
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="weather">
+                <a class="nav-link" href="/">
+                    سبد خرید (
+                    <span>
+                        @if (shoppingCartCountModel != null)
+                        {
+                            @shoppingCartCountModel.Count
+                        }
+                    </span>
+                    )
+                </a>
+            </NavLink>
+        </div>
+    </nav>
+</div> *@
+
+
+@code
+{
+    [CascadingParameter(Name = "ShoppingCartCountModel")]
+    private ShoppingCartCountModel? shoppingCartCountModel { get; set; }
+    int CustomerID = 1;
+    protected override async Task OnInitializedAsync()
+    {
+        if (shoppingCartCountModel != null)
+        {
+
+            shoppingCartCountModel.CountChange += async () =>
+            {
+                shoppingCartCountModel.Count = await _httpClient.GetFromJsonAsync<int>("http://10.0.2.2:6170/api/ShoppingCart/count");
+                StateHasChanged();
+            };
+
+        }
+        await base.OnInitializedAsync();
+    }
+}

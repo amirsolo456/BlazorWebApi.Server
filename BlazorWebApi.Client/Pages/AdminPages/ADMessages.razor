@@ -126,22 +126,19 @@
                                     <td colspan="@TableHeaderNames[4].Colspan">
                                         @if (replay.VillaID != null)
                                             @replay.VillaID
-
-
-
                                     </td>
 
                                     @if (replay.IDSend == AdminID)
                                     {
                                         <td colspan="1">
-                                            <button class="btnFont btnSize1 btn btn-outline" @onclick="() => OpenMessageDetail(replay.ID, replay.IDGroup)">ویرایش</button>
+                                            <button class="btnFont btnSize btn btn-outline" @onclick="() => OpenMessageDetail(replay.ID, replay.IDGroup)">ویرایش</button>
                                             <BlazorWebApi.Client.Shared.MessageDetailModal @ref=messageDetailModal MessageID="@selectedMessageID" IDGroup="@selectedIDGroup">
                                                 <span>
                                                     ویرایش
                                                 </span>
                                             </BlazorWebApi.Client.Shared.MessageDetailModal>
-                                            <button class="btnFont btnSize1 btn btn-outline " @onclick="() => ShowReplyForm(item.message.ID)">حذف</button>
-
+@*                                             <button class="btnFont btnSize1 btn btn-outline " @onclick="() => ShowReplyForm(item.message.ID)">حذف</button>
+ *@
                                         </td>
                                     }
                                     else
