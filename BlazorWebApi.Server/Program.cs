@@ -1,4 +1,4 @@
-using BlazorWebApi.Infrastructure.Data;
+﻿using BlazorWebApi.Infrastructure.Data;
 using BlazorWebApi.Application.Services;
 using BlazorWebApi.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -59,6 +59,7 @@ app.UseSerilogRequestLogging();
 app.UseBlazorFrameworkFiles();
 
 app.UseStaticFiles();
+
 app.UseHttpsRedirection();
 
 app.UseRouting();

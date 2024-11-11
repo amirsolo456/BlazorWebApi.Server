@@ -1,9 +1,9 @@
-﻿@inject NavigationManager navigationManager;
+﻿
+@inject NavigationManager navigationManager;
 @inject HttpClient _httpClient
-@inject IConfiguration Configuration
 
 <div class="card col-3 m-2" style="width: 18rem;padding:0">
-    <img src="/Images/@villa.ImageUrl" style="width:100%" class="card-img-top" alt="...">
+    <img src="_content/BlazorWebApi.SharedComponents/Images/@villa.ImageUrl" style="width:100%" class="card-img-top" alt="...">
     <div class="card-body">
         <h5 class="card-title">
             <a href="">
@@ -16,7 +16,7 @@
             <input @bind="quantity" type="number" placeholder="تعداد؟" class="form-control" />
 
             <button class="btn btn-outline-success m-2" @onclick="AddToCartAsync">
-                 
+
                 @if (HasProductInCart)
                 {
                     <span>
@@ -36,7 +36,7 @@
             </button>
 
         </div>
-        <a href="/VillaDetail/@villa.ID" class="btn btn-primary">نمایش جزئیات</a>
+        <a style="margin-right:5px" href="/VillaDetail/@villa.ID" class="btn btn-primary">نمایش جزئیات</a>
     </div>
 </div>
 
@@ -44,6 +44,9 @@
 @code {
     [Parameter]
     public Villa? villa { get; set; }
+    [Parameter]
+    public bool IsMobile{ get; set; }
+
     public double? quantity { get; set; } = 0;
     private bool HasProductInCart { get; set; } = false;
 
@@ -67,23 +70,26 @@
     {
         if (villa != null)
         {
+            string url = "http://10.0.2.2:6170/api/ShoppingCart";
+            if (!IsMobile) url = "http://localhost:6170/api/ShoppingCart";
+
             Console.WriteLine(HasProductInCart.ToString());
             if (!HasProductInCart)
             {
                 Console.WriteLine(JsonSerializer.Serialize(
                         new ShoppingCart
                             {
-                                CustomerID = 0,
+                                CustomerID = 1,
                                 Quantity = quantity.Value,
                                 VillaID = villa.ID
                             }));
-                var request = new HttpRequestMessage(HttpMethod.Post, "http://10.0.2.2:6170/api/ShoppingCart");
+                var request = new HttpRequestMessage(HttpMethod.Post, url);
                 // request.Headers.Add("Authorization", Configuration.GetValue<string>("ApiKey"));
                 request.Content = new StringContent(
                     JsonSerializer.Serialize(
                         new ShoppingCart
                             {
-                                CustomerID = 0,
+                                CustomerID = 1,
                                 Quantity = quantity.Value,
                                 VillaID = villa.ID
                             }
@@ -94,14 +100,14 @@
             }
             else
             {
-                var request = new HttpRequestMessage(HttpMethod.Put, "http://10.0.2.2:6170/api/ShoppingCart");
+                var request = new HttpRequestMessage(HttpMethod.Put, url);
                 // request.Headers.Add("Authorization", Configuration.GetValue<string>("ApiKey"));
                 request.Content = new StringContent(
                     JsonSerializer.Serialize(
                         new ShoppingCart
                             {
                                 CreateDate = DateTime.Now,
-                                CustomerID = 0,
+                                CustomerID = 1,
                                 Quantity = quantity.Value,
                                 UpdateDate = DateTime.Now,
                                 VillaID = villa.ID

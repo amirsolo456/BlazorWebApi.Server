@@ -1,0 +1,70 @@
+﻿@using BlazorWebApi.Domain.Entities
+@using System.Net.Http.Json
+@inherits LayoutComponentBase
+@inject HttpClient _httpClient
+<style>
+        /* تنظیمات کلی برای ساختار صفحه */
+        .sidebar-container {
+            display: flex;
+            height: 100vh; /* ارتفاع صفحه را پر کند */
+  }
+
+        /* استایل نوار کناری */
+        .sidebar {
+            width: 250px; /* عرض ثابت برای نوار کناری */
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            height: 100vh; /* ارتفاع کل صفحه */
+            position: relative; /* موقعیت نسبی به صفحه */
+            overflow-y: auto; /* اگر محتوا زیاد باشد، اسکرول شود */
+        }
+
+        /* استایل لینک‌های نوار کناری */
+        .sidebar-content a {
+            display: block;
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+        }
+
+            .sidebar-content a:hover {
+                background-color: #555;
+            }
+
+        /* استایل محتوای اصلی */
+        .main-content {
+            flex-grow: 1; /* باعث می‌شود محتوای اصلی تمام فضای باقی‌مانده را بگیرد */
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+</style>
+
+<CascadingValue Value="@shoppingCartCountModel" Name="ShoppingCartCountModel">
+
+    <Header />
+    <div class="sidebar-container">
+        <AdminRightMenu />
+        <div class="container">
+            @Body
+        </div>
+    </div>
+
+
+    <Footer />
+</CascadingValue>
+
+
+
+@code {
+    private ShoppingCartCountModel? shoppingCartCountModel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        shoppingCartCountModel = new ShoppingCartCountModel();
+        shoppingCartCountModel.Count = await _httpClient.GetFromJsonAsync<int>("/api/ShoppingCart/count"); ;
+        await base.OnInitializedAsync();
+    }
+
+
+}

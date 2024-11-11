@@ -4,6 +4,8 @@
 @using BlazorWebApi.Domain.Entities;
 @using BlazorWebApi.MobileClient.Components.ViewModel
 
+
+
 <div>
     <div class="row">
         
@@ -11,7 +13,7 @@
         {
             @foreach (Villa item in Villaviewmodel.Villas)
             {
-                <BlazorWebApi.MobileClient.Components.Shared.VillaItem villa="item" />
+                <BlazorWebApi.SharedComponents.VillaItemComponent villa="item" IsMobile="true"/>
             }
         }
     </div>
