@@ -4,6 +4,7 @@ using BlazorWebApi.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorWebApi.InfraStructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241113181754_changes01")]
+    partial class changes01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,32 +180,6 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("tblMessages");
-                });
-
-            modelBuilder.Entity("BlazorWebApi.Domain.Entities.Owner.VillaCategory", b =>
-                {
-                    b.Property<int>("ID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IDType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CategoryID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("ID", "IDType", "CategoryID");
-
-                    b.ToTable("tblVillaCategory");
                 });
 
             modelBuilder.Entity("BlazorWebApi.Domain.Entities.Owners", b =>
@@ -369,9 +346,6 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsOffer")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("Jacuzzi")
                         .HasColumnType("bit");
 
@@ -395,45 +369,9 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     b.Property<bool>("Swimmingpool")
                         .HasColumnType("bit");
 
-                    b.Property<double?>("TakhfifPerAllNights")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("TakhfifPerNight")
-                        .HasColumnType("float");
-
                     b.Property<DateTime?>("UpdateDate")
                         .HasMaxLength(30)
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("VillaCategory1")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("VillaCategory2")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("VillaCategory3")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("VillaCategory4")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("VillaCategory5")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("VillaType1")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("VillaType2")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("VillaType3")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("VillaType4")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("VillaType5")
-                        .HasColumnType("int");
 
                     b.HasKey("ID");
 

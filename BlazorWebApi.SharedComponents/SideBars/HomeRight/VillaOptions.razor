@@ -1,0 +1,48 @@
+﻿<style>
+    /* استایل برای لینک‌ها در سایدبار */
+    .sidebar-item {
+    margin: 10px 0;
+    }
+
+    .sidebar-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    }
+
+    .sidebar-link:hover {
+    background-color: #f0f0f0;
+    }
+
+    .sidebar-link i {
+    margin-right: 10px;
+    }
+
+</style>
+
+<!-- VillaOptions.razor -->
+<div class="sidebar-section">
+    <div class="sidebar-item">
+        <a href="/empty-villas" class="sidebar-link" @onclick="IsReserved">
+            <h4><i class="bi bi-house-door"></i> ویلاهای خالی</h4>
+        </a>
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback IsReserved { get; set; }
+
+    private async Task Onselect(){
+        if (IsReserved.HasDelegate){
+           await IsReserved.InvokeAsync(null);
+        }
+    }
+
+    private List<string> availableVillas = new List<string> { "ویلا 1", "ویلا 2", "ویلا 3" };
+}

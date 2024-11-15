@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using BlazorWebApi.Domain.Entities;
 using BlazorWebApi.InfraStructure.Repository;
+using BlazorWebApi.Server.Properties;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,10 +24,33 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IMessagesService, MessagesService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IOwnerService, OwnerService>();
-builder.Services.AddScoped<IAdminLogService, AdminLogService>();
-
+builder.Services.AddScoped<ILoginLogService, LoginLogService>();
+//builder.Services.AddScoped<IAdminLogService, AdminLogService>();
+builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Host.UseSerilog((hb, lc) => lc.ReadFrom.Configuration(hb.Configuration));
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+// تنظیمات Auth
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer(options =>
+    {
+        var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtSettings.Issuer,
+            ValidateAudience = true,
+            ValidAudience = jwtSettings.Audience,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)) // کلید امضاء
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddCors(optyion =>
 {
@@ -32,9 +58,12 @@ builder.Services.AddCors(optyion =>
     {
         policy.WithOrigins("https://localhost:6170")
             .AllowAnyHeader()
+            .AllowAnyOrigin()
             .AllowAnyMethod();
     });
 });
+
+
 
 var app = builder.Build();
 

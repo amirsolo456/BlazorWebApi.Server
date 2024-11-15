@@ -32,7 +32,7 @@ namespace BlazorWebApi.InfraStructure.Repository
             {
                 return _Context.tblAdmin.Where(c => c.UserName.Trim() == Username.Trim() && c.Password.Trim() == Password.Trim()).FirstOrDefault();
             }
-            else return new Admin();
+            else return null;
         }
 
         public int GetCount()

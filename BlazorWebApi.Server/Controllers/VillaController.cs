@@ -34,6 +34,23 @@ namespace BlazorWebApi.Server.Controllers
             return _VillaService.VillaCount();
         }
 
+        [HttpGet("offers")]
+        public IEnumerable<Villa> GetOffers()
+        {
+            return _VillaService.GetVillaByOffers();
+        }
+
+        [HttpGet("idtype/{IDType}")]
+        public IEnumerable<Villa> GetByIDType(int IDType)
+        {
+            return _VillaService.GetVillaByIDType(IDType);
+        }
+
+        [HttpGet("category/{IDType},{CategoryID}")]
+        public IEnumerable<Villa> GetByIDType(int IDType,int CategoryID)
+        {
+            return _VillaService.GetVillaByCategoryID(IDType, CategoryID);
+        }
 
         [HttpPut]
         public void Update(Villa villa)

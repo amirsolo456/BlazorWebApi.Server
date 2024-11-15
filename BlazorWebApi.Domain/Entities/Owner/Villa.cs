@@ -40,6 +40,20 @@ namespace BlazorWebApi.Domain.Entities
         public bool Swimmingpool { get; set; } = false;
         public bool Parking { get; set; } = false;
         public bool Guestroom { get; set; } = false;
+        public bool IsOffer { get; set; } = false;
+        public double? TakhfifPerNight { get; set; }
+        public double? TakhfifPerAllNights { get; set; }
+        public int? VillaType1 { get; set; }
+        public int? VillaType2 { get; set; }
+        public int? VillaType3 { get; set; }
+        public int? VillaType4 { get; set; }
+        public int? VillaType5 { get; set; }
 
+        public int? VillaCategory1 { get; set; }
+        public int? VillaCategory2 { get; set; }
+        public int? VillaCategory3 { get; set; }
+        public int? VillaCategory4 { get; set; }
+        public int? VillaCategory5 { get; set; }
+        public bool IsReserved { get; set; } = false;
     }
 }

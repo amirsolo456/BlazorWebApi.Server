@@ -12,6 +12,9 @@ namespace BlazorWebApi.Application.Services
     {
         public IEnumerable<Villa> GetAllVillas(Expression<Func<Villa,bool>>? filter = null ,string? IncludeProps=null);
         public Villa GetVillaByID(int ID);
+        public IEnumerable<Villa> GetVillaByOffers();
+        public IEnumerable<Villa> GetVillaByIDType(int Type);
+        public IEnumerable<Villa> GetVillaByCategoryID(int Type,int CategoryID);
         public int VillaCount ();
         public int VillaCountByName(string VillaName);
         public bool AddVilla(Villa villa);

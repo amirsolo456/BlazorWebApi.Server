@@ -66,11 +66,33 @@ namespace BlazorWebApi.Infrastructure.Repository
             return query;
         }
 
+        public IEnumerable<Villa> GetVillaByCategoryID(int Type, int CategoryID)
+        {
+            IQueryable<Villa> db = _context.tblVillas.AsQueryable();
+            db = db.Where(c => c.VillaCategory1 == CategoryID || c.VillaCategory2 == CategoryID || c.VillaCategory3 == CategoryID 
+            || c.VillaCategory4 == CategoryID || c.VillaCategory5 == CategoryID);
+            db = db.Where(c => c.VillaType1 == Type || c.VillaType2 == Type || c.VillaType3 == Type || c.VillaType4 == Type || c.VillaType5 == Type);
+
+            return db;
+        }
+
         public Villa GetVillaByID(int ID)
         {
 
             return _context.tblVillas.Where(C => C.ID == ID).FirstOrDefault();
 
+        }
+
+        public IEnumerable<Villa> GetVillaByIDType(int Type)
+        {
+            IQueryable<Villa> db = _context.tblVillas.AsQueryable();
+            db = db.Where(c => c.VillaType1 == Type || c.VillaType2 == Type || c.VillaType3 == Type || c.VillaType4 == Type || c.VillaType5 == Type);
+            return db;
+        }
+
+        public IEnumerable<Villa> GetVillaByOffers()
+        {
+            return _context.tblVillas.Where(c => c.IsOffer == true);
         }
 
         public bool SaveChanges()

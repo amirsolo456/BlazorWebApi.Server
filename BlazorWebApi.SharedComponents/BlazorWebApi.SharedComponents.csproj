@@ -22,4 +22,8 @@
     <ProjectReference Include="..\BlazorWebApi.Domain\BlazorWebApi.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\imagesSlideShow\" />
+  </ItemGroup>
+
 </Project>

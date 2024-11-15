@@ -1,13 +1,32 @@
-﻿@inherits LayoutComponentBase
+﻿
+@using BlazorWebApi.SharedComponents
+@inherits LayoutComponentBase
 @inject HttpClient _httpClient
 
+
 <CascadingValue Value="@shoppingCartCountModel" Name="ShoppingCartCountModel">
-    <Header/>
-    <div class="sidebar-container " dir="rtl">
-        <div class="container">
-            @Body
+    <Header />
+    <div class="container-fluid" dir="rtl">
+        <div class="row">
+            <!-- Sidebar: User Info and Villa Options -->
+            <div class="col-md-2">
+                <BlazorWebApi.SharedComponents.SideBars.HomeRight.HomeRightSideBar />  <!-- کامپوننت سایدبار جدید که همه چیز در آن قرار دارد -->
+            </div>
+
+            <!-- Main Content (Body) -->
+            <div class="col-md-10">
+                <div class="main-content">
+                    @Body  <!-- محتوای صفحه خاص در اینجا نمایش داده می‌شود -->
+                </div>
+            </div>
         </div>
     </div>
+
+    @*     <div class="sidebar-container" dir="rtl">
+    <div class="container">
+    @Body
+    </div>
+    </div> *@
     <Footer />
 </CascadingValue>
 
@@ -19,9 +38,15 @@
     protected override async Task OnInitializedAsync()
     {
         shoppingCartCountModel = new ShoppingCartCountModel();
-        shoppingCartCountModel.Count = await _httpClient.GetFromJsonAsync<int>("/api/ShoppingCart/count"); ;
+        shoppingCartCountModel.Count = await _httpClient.GetFromJsonAsync<int>("/api/ShoppingCart/count"); 
         await base.OnInitializedAsync();
     }
 
-
+    // public async Task CategorySelected()
+    // {
+    //     Body.Target.
+    //     // اینجا شما می‌توانید هر کاری که می‌خواهید انجام دهید
+    //     // برای مثال می‌توانید دسته‌بندی را به صفحه Home ارسال کنید
+    //     // Console.WriteLine($"دسته بندی انتخاب شده: {categoryId}");
+    // }
 }

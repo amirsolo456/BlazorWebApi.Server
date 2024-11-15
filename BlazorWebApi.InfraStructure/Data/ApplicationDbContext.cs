@@ -1,4 +1,5 @@
 ﻿using BlazorWebApi.Domain.Entities;
+using BlazorWebApi.Domain.Entities.Owner;
 using BlazorWebApi.Domain.Entities.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -24,6 +25,10 @@ namespace BlazorWebApi.Infrastructure.Data
             new OnvanList { ID = 1, IDType = 1, Onvan = "مالک" },
             new OnvanList { ID = 2, IDType = 1, Onvan = "ادمین" }
             );
+
+            modelBuilder.Entity<VillaCategory>()
+    .HasKey(vc => new { vc.ID, vc.IDType, vc.CategoryID });
+
         }
 
         public DbSet<Villa> tblVillas { get; set; }
@@ -35,6 +40,7 @@ namespace BlazorWebApi.Infrastructure.Data
         public DbSet<Admin> tblAdmin { get; set; }
         public DbSet<Messages> tblMessages { get; set; }
         public DbSet<OnvanList> tblOnvanList { get; set; }
-        public DbSet<AdminLog> tblAdminLog { get; set; }
+        public DbSet<LoginLog> tblLoginLog { get; set; }
+        public DbSet<VillaCategory> tblVillaCategory { get; set; }
     }
 }

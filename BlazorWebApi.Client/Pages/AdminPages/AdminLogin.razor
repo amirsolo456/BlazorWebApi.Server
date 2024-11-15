@@ -1,67 +1,104 @@
 ﻿@page "/AdminLogin"
+@using System.Security.Claims
+@using System.IdentityModel.Tokens.Jwt
+@using Blazored.LocalStorage
 @inject NavigationManager _navigate
 @inject HttpClient _httpclient
+@inject ILocalStorageService _localStorage
 
 <div class="login-container">
     <h2>ورود به پنل ادمین</h2>
     <EditForm Model="admin" OnValidSubmit="HandleLogin">
-@*         <DataAnnotationsValidator />
-        <ValidationSummary /> *@
-
         <div class="form-group">
             <label for="username">نام کاربری:</label>
-            <InputText id="username" @bind-Value="admin.UserName"  class="form-control" />
-@*             <ValidationMessage For="@(() => admin.UserName)" />
- *@        </div>
+            <InputText id="username" @bind-Value="admin.UserName" class="form-control" />
+            <ValidationMessage For="@(() => admin.UserName)" />
+
+        </div>
 
         <div class="form-group">
             <label for="password">رمز عبور:</label>
             <InputText id="password" @bind-Value="admin.Password" type="password" class="form-control" />
-@*             <ValidationMessage For="@(() => admin.Password)" />
- *@        </div>
+            <ValidationMessage For="@(() => admin.Password)" />
+
+        </div>
 
         <button type="submit" class="btn btn-primary">ورود</button>
     </EditForm>
+
+    <p>@formStatus</p>
 </div>
 
 @code {
+    private string formStatus = "";
     public Admin admin = new Admin();
     private LoginModel loginModel = new LoginModel();
+    private AuthService authService;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
 
     private async Task HandleLogin()
     {
         try
         {
-            Console.WriteLine(admin.UserName);
-            Console.WriteLine(admin.Password);
-            Admin? user = await _httpclient.GetFromJsonAsync<Admin?>("/api/Admin/" + admin.UserName + "," + admin.Password);
-            if (user == null)
+            var response = await _httpclient.GetStringAsync("/api/Admin/login/ " + admin.UserName + " , " + admin.Password);
+
+            if (response != "")
             {
-                Console.WriteLine("یوزرنیم یا پسوورد اشتباه است");
+                var token = response;
+
+                await _localStorage.SetItemAsync("authToken", token);
+
+                var handler = new JwtSecurityTokenHandler();
+
+                HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/LoginLog/");
+                requestMessage.Content = new StringContent(JsonSerializer.Serialize(new LoginLog
+                    {
+                        IPAddress = "127.0.0.1",
+                        IsAdmin = true,
+                        IsCustomer = false,
+                        IsOwner = false,
+                        LoginTime = DateTime.Now.ToString(),
+                        UserID = admin.ID,
+                        IsLogin = true
+                    }), Encoding.UTF8, "application/json");
+
+                var resp = await _httpclient.SendAsync(requestMessage);
+                if (resp.IsSuccessStatusCode)
+                {
+                    _navigate.NavigateTo("/");
+                }
+          
+                // Console.WriteLine("1");
+                // تجزیه توکن به یک شیء JwtSecurityToken
+                // var jsonToken = handler.ReadJwtToken(token);
+                // Console.WriteLine("2");
+                // دسترسی به Claims (اطلاعات داخل payload)
+                // var claims = jsonToken.Claims;
+
+                // // استخراج Claims خاص مانند 'sub', 'role', 'AccessLevel'
+                // var sub = claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+                // var role = claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+                // var accessLevel = claims.FirstOrDefault(c => c.Type == "AccessLevel")?.Value;
+
+                // نمایش Claims در کنسول
+                // Console.WriteLine($"Sub: {sub}");
+                // Console.WriteLine($"Role: {role}");
+                // Console.WriteLine($"Access Level: {accessLevel}");
+
             }
             else
             {
-                Console.WriteLine("خوش آمدید");
-                _navigate.NavigateTo("/AdminMessages");
+                formStatus = "لطفاً همه فیلدها را درست وارد کنید.";
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            
-            throw;
+            Console.WriteLine("خطا" + ex.Message);
         }
-        // پیاده‌سازی منطق احراز هویت
-        // مثال: اگر نام کاربری و رمز عبور درست باشند
-        // if (loginModel.Username == "admin" && loginModel.Password == "password")
-        // {
-        //     // ورود موفق
-        //     // مثال: ناوبری به صفحه اصلی ادمین
-        //     _navigate.NavigateTo("/admin-dashboard");
-        // }
-        // else
-        // {
-        //     // نمایش پیام خطا
-        // }
     }
 
     public class LoginModel

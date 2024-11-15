@@ -58,8 +58,10 @@
     {
         if (villa != null)
         {
+            string url = "http://10.0.2.2:6170/api/ShoppingCart/has-villa/";
+            if (!IsMobile) url = "http://localhost:6170/api/ShoppingCart/has-villa/";
             HasProductInCart = await _httpClient.GetFromJsonAsync<bool>(
-                "http://10.0.2.2:6170/api/ShoppingCart/has-villa/" + villa.ID + "," + 0
+                url + villa.ID + "," + 0
                 );
         }
 

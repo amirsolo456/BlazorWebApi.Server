@@ -1,0 +1,99 @@
+﻿@inherits LayoutComponentBase
+
+<style>
+    /* سایدبار کلی */
+    .sidebar-wrapper {
+        position: relative;
+        padding-top: 20px;
+        background-color: #f8f9fa;
+        width: 100%; /* می‌توانید تنظیم کنید */
+    }
+
+    /* اطلاعات کاربر */
+    .user-info {
+        position: relative;
+        height: 400px; /* ارتفاع ثابت برای کادر اطلاعات کاربر */
+        overflow: auto; /* برای اسکرول کردن در صورتی که محتویات بیشتر از 400px باشد */
+        z-index: 10;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px; /* گرد کردن گوشه‌ها */
+        margin-bottom: 20px; /* فاصله پایین برای ایجاد فاصله با سایر بخش‌ها */
+    }
+
+    /* سایر بخش‌های سایدبار که زیر اطلاعات کاربر قرار می‌گیرند */
+    .villa-options,
+    .map-location,
+    .booking-steps,
+    .faq,
+    .support {
+        position: relative;
+        z-index: 1;
+        padding: 10px;
+        margin-top: 10px; /* فاصله بالای هر بخش */
+    }
+    /* استایل برای لینک‌ها در سایدبار */
+    .sidebar-item {
+        margin: 10px 0;
+    }
+
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+        .sidebar-link:hover {
+            background-color: #f0f0f0;
+        }
+
+        .sidebar-link i {
+            margin-right: 10px;
+        }
+</style>
+
+
+<div class="sidebar-wrapper">
+    <!-- اطلاعات کاربر در بالای سایدبار قرار می‌گیرد -->
+    <div class="user-info">
+        <UserInfo />
+    </div>
+
+    <div class="support faq">
+        <!-- بقیه بخش‌های سایدبار -->
+       @*  <VillaOptions /> *@
+        <div class="sidebar-section">
+            <div class="sidebar-item">
+                <a href="/empty-villas" class="sidebar-link" @onclick="IsReserved">
+                    <h4><i class="bi bi-house-door"></i> ویلاهای خالی</h4>
+                </a>
+            </div>
+
+        </div>
+        @*     <MapLocation />
+        *@    <BookingSteps />
+        <FAQ />
+        <Support />
+    </div>
+
+</div>
+
+@code{
+
+    [Parameter]
+    public EventCallback IsReserved { get; set; }
+
+    private async Task Onselect()
+    {
+        if (IsReserved.HasDelegate)
+        {
+            await IsReserved.InvokeAsync(null);
+        }
+    }
+
+    private List<string> availableVillas = new List<string> { "ویلا 1", "ویلا 2", "ویلا 3" };
+}

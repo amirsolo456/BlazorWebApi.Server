@@ -1,0 +1,40 @@
+﻿<style>
+    /* کادر برای عکس کاربر */
+    .user-image-wrapper {
+        width: 150px; /* عرض کادر */
+        height: 150px; /* ارتفاع کادر */
+        overflow: hidden; /* برای پنهان کردن بخشی از تصویر که خارج از کادر قرار می‌گیرد */
+        border-radius: 50%; /* گرد کردن گوشه‌ها برای ساخت کادر دایره‌ای */
+        margin: 10px auto; /* فاصله از سایر بخش‌ها */
+        display: flex;
+        justify-content: center; /* قرار دادن تصویر در وسط کادر */
+        align-items: center; /* قرار دادن تصویر در وسط کادر */
+        border: 2px solid #ddd; /* حاشیه کادر */
+        background-color: #f5f5f5; /* رنگ پس‌زمینه کادر */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* سایه برای جذابیت بیشتر */
+    }
+
+    /* تصویر داخل کادر */
+    .user-image {
+        width: 100%; /* عرض تصویر مطابق با کادر */
+        height: 100%; /* ارتفاع تصویر مطابق با کادر */
+        object-fit: cover; /* مقیاس تصویر به‌طور خودکار برای پر کردن کادر */
+    }
+
+</style>
+
+<!-- UserInfo.razor -->
+<div class="sidebar-section">
+    <h4>اطلاعات کاربر</h4>
+    <div class="user-image-wrapper">
+        <img src="path_to_user_image.jpg" alt="User Photo" class="user-image" />
+    </div>
+
+    <p>نام کاربری: @userName</p>
+    <p>آدرس ایمیل: @userEmail</p>
+</div>
+
+@code {
+    private string userName = "John Doe";
+    private string userEmail = "john.doe@example.com";
+}

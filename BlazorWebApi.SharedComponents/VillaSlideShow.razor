@@ -1,0 +1,54 @@
+﻿<style>
+/* 
+    .sidebar-container{
+        background-color: black;
+    } */
+    #carouselExampleControls {
+        max-width: 80%; /* حداکثر عرض اسلایدر را تنظیم می‌کند */
+        max-height: 400px; /* حداکثر ارتفاع اسلایدر */
+        overflow: hidden; /* هر چیزی که از اسلایدر بیرون برود، مخفی می‌شود */
+        margin: 0 auto; /* مرکز قرار دادن اسلایدر با استفاده از margin */
+        overflow: hidden; /* مخفی کردن محتوای اضافی */
+        position: relative;
+        
+    }
+
+    .carousel-inner {
+        max-height: 500px; /* محدود کردن ارتفاع کادر داخلی اسلایدر */
+    }
+
+    .carousel-item img {
+        border-radius: 15px; /* برای گرد کردن 4 گوشه */
+
+        width: 100%;
+        height: 400px; /* تصویر به طور خودکار ارتفاع را به اندازه کادر تنظیم می‌کند */
+        object-fit: cover; /* تصویر به اندازه کادر اسلایدر تغییر اندازه داده می‌شود */
+    }
+</style>
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="_Content/BlazorWebApi.SharedComponents/imagesSlideShow/image1.jpg" alt="Image 1">
+        </div>
+        <div class="carousel-item">
+            <img src="_Content/BlazorWebApi.SharedComponents/imagesSlideShow/image2.jpg" alt="Image 2">
+        </div>
+        <div class="carousel-item">
+            <img src="_Content/BlazorWebApi.SharedComponents/imagesSlideShow/image3.jpg" alt="Image 3">
+        </div>
+        <div class="carousel-item">
+            <img src="_Content/BlazorWebApi.SharedComponents/imagesSlideShow/image4.jpg" alt="Image 4">
+        </div>
+        <div class="carousel-item">
+            <img src="_Content/BlazorWebApi.SharedComponents/imagesSlideShow/image5.jpg" alt="Image 5">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
