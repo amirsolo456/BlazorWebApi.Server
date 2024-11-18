@@ -15,6 +15,7 @@ namespace BlazorWebApi.Application.Services
         public IEnumerable<Villa> GetVillaByOffers();
         public IEnumerable<Villa> GetVillaByIDType(int Type);
         public IEnumerable<Villa> GetVillaByCategoryID(int Type,int CategoryID);
+        public IEnumerable<Villa> GetNotReservedVillas();
         public int VillaCount ();
         public int VillaCountByName(string VillaName);
         public bool AddVilla(Villa villa);

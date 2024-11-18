@@ -1,4 +1,5 @@
-﻿<style>
+﻿@inject HomeRightSideBarService _sidebarservice
+<style>
     /* استایل برای لینک‌ها در سایدبار */
     .sidebar-item {
     margin: 10px 0;
@@ -27,7 +28,7 @@
 <!-- VillaOptions.razor -->
 <div class="sidebar-section">
     <div class="sidebar-item">
-        <a href="/empty-villas" class="sidebar-link" @onclick="IsReserved">
+        <a href="#" class="sidebar-link" @onclick="SelectVillaOptions">
             <h4><i class="bi bi-house-door"></i> ویلاهای خالی</h4>
         </a>
     </div>
@@ -35,14 +36,10 @@
 </div>
 
 @code {
-    [Parameter]
-    public EventCallback IsReserved { get; set; }
 
-    private async Task Onselect(){
-        if (IsReserved.HasDelegate){
-           await IsReserved.InvokeAsync(null);
-        }
+    private void SelectVillaOptions()
+    {
+        _sidebarservice.UpdateToVillaOptions(); // به‌روزرسانی سرویس
     }
-
     private List<string> availableVillas = new List<string> { "ویلا 1", "ویلا 2", "ویلا 3" };
 }

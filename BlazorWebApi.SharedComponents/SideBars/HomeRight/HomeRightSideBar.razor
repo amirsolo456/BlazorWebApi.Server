@@ -1,12 +1,23 @@
 ﻿@inherits LayoutComponentBase
 
 <style>
+
     /* سایدبار کلی */
     .sidebar-wrapper {
         position: relative;
         padding-top: 20px;
-        background-color: #f8f9fa;
         width: 100%; /* می‌توانید تنظیم کنید */
+        font-family: Tahoma;
+        background-image: url('_content/BlazorWebApi.SharedComponents/images/leaves.png'); /* مسیر تصویر */
+        background-repeat: repeat; /* تکرار تصویر */
+        background-position: top left; /* موقعیت تصویر در گوشه بالای سمت چپ */
+        background-color: coral;
+        background-blend-mode: luminosity;
+        height: contain; /* ارتفاع سایدبار */
+        width: 250px; /* عرض سایدبار */
+        box-shadow: -1px 1px 10px;
+        border-radius: 10px; /* گرد کردن گوشه‌ها */
+        position: absolute;
     }
 
     /* اطلاعات کاربر */
@@ -15,10 +26,11 @@
         height: 400px; /* ارتفاع ثابت برای کادر اطلاعات کاربر */
         overflow: auto; /* برای اسکرول کردن در صورتی که محتویات بیشتر از 400px باشد */
         z-index: 10;
-        background-color: #fff;
         padding: 10px;
         border-radius: 10px; /* گرد کردن گوشه‌ها */
         margin-bottom: 20px; /* فاصله پایین برای ایجاد فاصله با سایر بخش‌ها */
+        background-color: transparent;
+        color: white;
     }
 
     /* سایر بخش‌های سایدبار که زیر اطلاعات کاربر قرار می‌گیرند */
@@ -31,6 +43,8 @@
         z-index: 1;
         padding: 10px;
         margin-top: 10px; /* فاصله بالای هر بخش */
+        display:contents;
+        position:absolute;
     }
     /* استایل برای لینک‌ها در سایدبار */
     .sidebar-item {
@@ -58,42 +72,16 @@
 
 
 <div class="sidebar-wrapper">
-    <!-- اطلاعات کاربر در بالای سایدبار قرار می‌گیرد -->
     <div class="user-info">
         <UserInfo />
     </div>
 
     <div class="support faq">
-        <!-- بقیه بخش‌های سایدبار -->
-       @*  <VillaOptions /> *@
-        <div class="sidebar-section">
-            <div class="sidebar-item">
-                <a href="/empty-villas" class="sidebar-link" @onclick="IsReserved">
-                    <h4><i class="bi bi-house-door"></i> ویلاهای خالی</h4>
-                </a>
-            </div>
-
-        </div>
-        @*     <MapLocation />
-        *@    <BookingSteps />
+        <VillaOptions />
+        @*    <MapLocation /> *@
+        <BookingSteps />
         <FAQ />
         <Support />
     </div>
 
 </div>
-
-@code{
-
-    [Parameter]
-    public EventCallback IsReserved { get; set; }
-
-    private async Task Onselect()
-    {
-        if (IsReserved.HasDelegate)
-        {
-            await IsReserved.InvokeAsync(null);
-        }
-    }
-
-    private List<string> availableVillas = new List<string> { "ویلا 1", "ویلا 2", "ویلا 3" };
-}

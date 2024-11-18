@@ -1,40 +1,95 @@
-﻿<style>
+﻿@using System.Security.Claims
+@using Blazored.LocalStorage
+@* @inject AuthService authservice *@
+@inject HttpClient _httpclient
+@inject ILocalStorageService _localStorage
+
+<style>
     /* کادر برای عکس کاربر */
     .user-image-wrapper {
-        width: 150px; /* عرض کادر */
-        height: 150px; /* ارتفاع کادر */
-        overflow: hidden; /* برای پنهان کردن بخشی از تصویر که خارج از کادر قرار می‌گیرد */
-        border-radius: 50%; /* گرد کردن گوشه‌ها برای ساخت کادر دایره‌ای */
-        margin: 10px auto; /* فاصله از سایر بخش‌ها */
-        display: flex;
-        justify-content: center; /* قرار دادن تصویر در وسط کادر */
-        align-items: center; /* قرار دادن تصویر در وسط کادر */
-        border: 2px solid #ddd; /* حاشیه کادر */
-        background-color: #f5f5f5; /* رنگ پس‌زمینه کادر */
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* سایه برای جذابیت بیشتر */
+    width: 150px; /* عرض کادر */
+    height: 150px; /* ارتفاع کادر */
+    overflow: hidden; /* برای پنهان کردن بخشی از تصویر که خارج از کادر قرار می‌گیرد */
+    border-radius: 50%; /* گرد کردن گوشه‌ها برای ساخت کادر دایره‌ای */
+    margin: 10px auto; /* فاصله از سایر بخش‌ها */
+    display: flex;
+    justify-content: center; /* قرار دادن تصویر در وسط کادر */
+    align-items: center; /* قرار دادن تصویر در وسط کادر */
+    border: 2px solid #ddd; /* حاشیه کادر */
+    background-color: cadetblue ; /* رنگ پس‌زمینه کادر */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* سایه برای جذابیت بیشتر */
+
     }
 
     /* تصویر داخل کادر */
     .user-image {
-        width: 100%; /* عرض تصویر مطابق با کادر */
-        height: 100%; /* ارتفاع تصویر مطابق با کادر */
-        object-fit: cover; /* مقیاس تصویر به‌طور خودکار برای پر کردن کادر */
+    width: 100%; /* عرض تصویر مطابق با کادر */
+    height: 100%; /* ارتفاع تصویر مطابق با کادر */
+    object-fit: cover; /* مقیاس تصویر به‌طور خودکار برای پر کردن کادر */
+    }
+
+    .sidebar-text{
+        color:black;
+        margin-right:20px;
+    }
+
+    .sidebar-section{
+        align-items:center;
+        justify-content:center;
     }
 
 </style>
 
 <!-- UserInfo.razor -->
-<div class="sidebar-section">
+<div id="userinfo" class="sidebar-section">
     <h4>اطلاعات کاربر</h4>
     <div class="user-image-wrapper">
         <img src="path_to_user_image.jpg" alt="User Photo" class="user-image" />
     </div>
+    <div class="sidebar-text">
+        <p>نام کاربری: @(claims != null && !string.IsNullOrEmpty(claims.FindFirst("sub")?.Value) ? claims.FindFirst("sub")?.Value : "میهمان")  </p>
+        <p>آدرس ایمیل:  @(claims != null && !string.IsNullOrEmpty(claims.FindFirst("sub")?.Value) ? claims.FindFirst("sub")?.Value : "میهمان")</p>
+    </div>
 
-    <p>نام کاربری: @userName</p>
-    <p>آدرس ایمیل: @userEmail</p>
+
 </div>
+<script>
+        $(window).scroll(function(){
+        $("#userinfo").css("opacity", 1 - $(window).scrollTop() / 700);
+    });
 
+</script>
 @code {
     private string userName = "John Doe";
     private string userEmail = "john.doe@example.com";
+    private static string SecKey = "aVeryLongAndSecureSecretKeyThatIsAtLeast32Bytes";
+    ClaimsPrincipal claims = new ClaimsPrincipal();
+    AuthService authService = new AuthService();
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("1");
+        string? token = await _localStorage.GetItemAsync<string>("authToken");
+        Console.WriteLine(token);
+        if (!string.IsNullOrEmpty(token) && authService.Validator(token, SecKey))
+        {
+            Console.WriteLine("2");
+            try
+            {
+                claims = authService.ExtractClaims(token, SecKey);
+                if (claims != null)
+                {
+                    Console.WriteLine(claims.FindFirst("sub")?.Value);
+
+                }
+                else Console.WriteLine("null");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+        StateHasChanged();
+        await base.OnInitializedAsync();
+    }
 }

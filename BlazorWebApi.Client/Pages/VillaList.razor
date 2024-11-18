@@ -1,36 +1,102 @@
 ﻿@page "/"
+@inject HomeRightSideBarService _Sidebarservice
 @inject HttpClient _HttpClient
+@inject NavigationManager _navigate
+@inject BlazorWebApi.SharedComponents.AuthService authservice
+@using Blazored.LocalStorage
 @using BlazorWebApi.Domain.Entities;
+@using BlazorWebApi.SharedComponents.SideBars.HomeRight
+@using System.IdentityModel.Tokens.Jwt
+@using Microsoft.IdentityModel.Tokens
+@inject ILocalStorageService _localStorage
 
-<BlazorWebApi.SharedComponents.VillaSlideShow />
+<style>
+    .row {
+        background-color: white;
+    }
 
-<BlazorWebApi.SharedComponents.BodyNavBar OnOffer="GetSpecialsOffes" Category="GetCategory" />
+    .items-container {
+        margin: auto;
+        justify-content: center;
+        justify-items: center;
+    }
+
+    .villa-container {
+        margin: auto;
+        justify-content: center;
+        justify-items: center;
+        padding: 5px;
+        flex: auto;
+        box-shadow: -1px 1px 10px;
+    }
+
+        .villa-container img:hover {
+            transform: scale(1.1); /* بزرگتر شدن دکمه هنگام هاور */
+        }
+
+    .img {
+        border-radius: 25px !important;
+        /*          box-shadow: -1px 1px 1px; */
+    }
+
+</style>
+<div class="row" style="position:relative ; z-index:999">
+    <BlazorWebApi.SharedComponents.BodyHeaderComponent />
+</div>
+<div class="row" style="position:relative ; z-index:0">
+    <BlazorWebApi.SharedComponents.VillaSlideShow />
+</div>
+<div class="row" >
+    <BlazorWebApi.SharedComponents.BodySlideBarComponent />
+</div>
+<div class="row">
+    <BlazorWebApi.SharedComponents.BodyNavBar OnOffer="GetSpecialsOffes" Category="GetCategory" />
+</div>
+<div class="row">
+    <BlazorWebApi.SharedComponents.AmazingVillasComponent />
+</div>
+
+<div class="mb-6 lg:mb-9 text-center"><h3 class="text-h3">تمام ویلا ها</h3></div>
+
+
 <div>
-    <div class="row">
+    <div class="row items-container">
         @if (Villas != null && Villas.Any())
         {
             @foreach (Villa item in Villas)
             {
                 <BlazorWebApi.SharedComponents.VillaItemComponent villa="item" IsMobile="false" />
-                @*    <VillaItem villa="item" /> *@
+
             }
         }
 
     </div>
 </div>
+<div class="villa-container">
+    <div class="row" style=" border-radius: 50px;">
+        <img class="img" style="width:650px ; height:350px ; border-radius:10px" src="_content/BlazorWebApi.SharedComponents/Images/villaview1.png" />
+        <img class="img" style="width:650px ; height:350px ; border-radius:10px" src="_content/BlazorWebApi.SharedComponents/Images/villaview1.png" />
+    </div>
 
+</div>
+
+<BlazorWebApi.SharedComponents.PortablRentBtnComponent />
+
+<BlazorWebApi.SharedComponents.PortablSupportComponent />
 @code {
-    [Parameter]
-    public EventCallback OnReservedVilla { get; set; }
-    [CascadingParameter] public int selectedCategory { get; set; }
     public IEnumerable<Villa>? Villas { get; set; }
+    private static string SecKey = "aVeryLongAndSecureSecretKeyThatIsAtLeast32Bytes";
 }
 
-@functions{
+@functions {
     protected override async Task OnInitializedAsync()
     {
         try
         {
+            _Sidebarservice.OnVillaOptions += VillaOptionsStateChanged;
+            _Sidebarservice.OnBookingStep += BookingStepsStateChanged;
+            _Sidebarservice.OnFAQ += FAQStateChanged;
+            _Sidebarservice.OnSupport += SupportChanged;
             Villas = await _HttpClient.GetFromJsonAsync<IEnumerable<Villa>>("/api/Villa");
         }
         catch (Exception)
@@ -52,6 +118,94 @@
     {
         Villas = await _HttpClient.GetFromJsonAsync<IEnumerable<Villa>>("/api/Villa/idtype/" + Type);
         StateHasChanged();
+    }
+
+
+    private async void VillaOptionsStateChanged()
+    {
+
+        Villas = await _HttpClient.GetFromJsonAsync<IEnumerable<Villa>>("/api/Villa/notreserved");
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void BookingStepsStateChanged()// مراحل رزرو
+    {
+        if (await CheckToken())
+        {
+
+        }
+        else
+        {
+            _navigate.NavigateTo("/adminlogin");
+        }
+        return;
+    }
+
+    private async void FAQStateChanged()// سوالات متداول
+    {
+        if (await CheckToken())
+        {
+
+        }
+        else
+        {
+            _navigate.NavigateTo("/adminlogin");
+        }
+        return;
+    }
+
+    private async void SupportChanged()// سوالات متداول
+    {
+
+        if (await CheckToken())
+        {
+
+        }
+        else
+        {
+            _navigate.NavigateTo("/adminlogin");
+        }
+        return;
+    }
+
+    public void Dispose()// حذف رویداد
+    {
+        _Sidebarservice.OnVillaOptions -= VillaOptionsStateChanged;
+        _Sidebarservice.OnBookingStep -= BookingStepsStateChanged;
+        _Sidebarservice.OnFAQ -= FAQStateChanged;
+        _Sidebarservice.OnSupport -= SupportChanged;
+    }
+
+    public async Task<bool> CheckToken()
+    {
+        bool b = false;
+        try
+        {
+            string token = await _localStorage.GetItemAsync<string>("authToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+                try
+                {
+                    if (authservice.Validator(token, "aVeryLongAndSecureSecretKeyThatIsAtLeast32Bytes"))
+                    {
+                        Console.WriteLine("true");
+                        return true;
+                    }
+                    else return false;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("false" + ex.Message);
+                    return false;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return false;
+        }
+        return b;
     }
 }
 

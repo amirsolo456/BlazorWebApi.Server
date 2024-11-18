@@ -1,6 +1,13 @@
-﻿<!-- BookingSteps.razor -->
+﻿@inject HomeRightSideBarService _sidebarservice
+<!-- BookingSteps.razor -->
 <div class="sidebar-section">
-    <h4>مراحل رزرو</h4>
+
+    <div class="sidebar-item">
+        <a href="javascript:void(0)" class="sidebar-link" @onclick="SelectBookingSteps">
+            <h4><i class="bi bi-house-door"></i> مراحل رزرو</h4>
+        </a>
+    </div>
+
     <ol>
         <li>انتخاب تاریخ</li>
         <li>انتخاب ویلا</li>
@@ -8,3 +15,9 @@
         <li>تایید رزرو</li>
     </ol>
 </div>
+@code{
+    private void SelectBookingSteps()
+    {
+        _sidebarservice.UpdateToBookingSteps(); // به‌روزرسانی سرویس
+    }
+}

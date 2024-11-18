@@ -1,0 +1,125 @@
+﻿@using BlazorWebApi.Domain.Entities.Shared
+@using BlazorWebApi.SharedComponents
+@using Microsoft.JSInterop
+@inject HttpClient _httpclient
+@inject NavigationManager _navigate;
+@inject IJSRuntime _jsruntime
+<script src="_content/BlazorWebApi.SharedComponents/UserLoginJS.js"></script>
+
+<style>
+    .modal {
+    margin: auto;
+    color: black;
+    font-style: normal;
+    font-family:BYekan,Tahoma;   
+    border-radius:10px;
+    }
+
+    .modal div:first-of-type:hover {
+    transform: scale(1.01);
+    }
+
+    .form-group{
+        margin-top:25px;
+    }
+
+    button{
+        width:150px;
+    }
+</style>
+
+<div class="modal fade" id="@id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+             @*    <h5 class="modal-title" id="staticBackdropLabel">@(ChildContent != null ? ChildContent : " ")</h5> *@
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div style="background-color:antiquewhite ; height:50px; justify-items:center ; justify-content:center ; border-radius:5px;box-shadow:-1px 1px 10px rgba(0,0,0,0.5)">
+                    <h2 style="font-family:Tahoma; margin-top:7px ;">ورود به پنل ادمین</h2>
+                </div>
+
+                <EditForm Model="customer" OnValidSubmit="HandleLogin">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group">
+                        <label for="emailadress">ایمیل/نام کاربری</label>
+                        <InputText id="emailadress" @bind-Value="customer.EmailAddres" class="form-control modified valid" autocomplete="emailadress" />
+                        <ValidationMessage For="@(() => customer.EmailAddres)" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">رمز عبور:</label>
+                        <InputText id="password" @bind-Value="customer.Password" type="password" class="form-control" autocomplete="current-password" />
+                        <ValidationMessage For="@(() => customer.Password)" />
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="margin-top:5px;">ورود</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="display: none;">انصراف</button>
+                </EditForm>
+                <p>@LoginMessage</p>
+
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function triggerHiddenButton() {
+    const button = document.querySelector('[data-bs-dismiss="modal"]');
+    if (button) {
+    button.click();
+    }
+    }
+
+</script>
+
+@code {
+    public Customer customer=new Customer();
+    private string LoginMessage = "";
+}
+@functions {
+    private async void HandleLogin()
+    {
+        if (!string.IsNullOrEmpty(customer.EmailAddres))
+        {
+            if (!string.IsNullOrEmpty(customer.Password))
+            {
+                var user = _httpclient.GetFromJsonAsync<Customer>("/api/Customer/userlogin/" + customer.EmailAddres + "," + customer.Password);
+                if (user != null)
+                {
+                    HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, "/api/LoginLog");
+                    req.Content = new StringContent(JsonSerializer.Serialize(new LoginLog
+                        {
+                            IPAddress = "127.0.0.1",
+                            IsAdmin = false,
+                            IsCustomer = true,
+                            IsLogin = true,
+                            IsOwner = false,
+                            LoginTime = DateTime.UtcNow.ToString(),
+                            UserID = user.Id
+
+                        }), Encoding.UTF8, "application/json");
+                    var resp = await _httpclient.SendAsync(req);
+
+
+                    if (resp.IsSuccessStatusCode)
+                    {
+                        await _jsruntime.InvokeVoidAsync("triggerHiddenButton");
+                    }
+                    else
+                    {
+                        LoginMessage = "خطایی رخ داده لطفا چند دقیقه بعد دوباره امتحان کنید.";
+                    }
+                }
+            }
+            else LoginMessage = "لطفا رمز عبور را به درتسی وارد کنید.";
+        }
+        else LoginMessage = "لطفا ایمیل/نام کاربری را به درتسی وارد کنید.";
+    }
+}

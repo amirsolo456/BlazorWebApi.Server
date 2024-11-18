@@ -1,9 +1,31 @@
-﻿<!-- FAQ.razor -->
+﻿@inject HomeRightSideBarService _homerightbarservice
+<!-- FAQ.razor -->
 <div class="sidebar-section">
-    <h4>سوالات متداول</h4>
+    <div class="sidebar-item">
+        <a href="javascript:void(0)" class="sidebar-link" @onclick="SelectOnFAQ">
+            <h4><i class="bi bi-house-door"></i> سوالات متداول</h4>
+        </a>
+    </div>
     <ul>
-        <li>چطور ویلا رزرو کنم؟</li>
-        <li>چگونه پرداخت کنم؟</li>
-        <li>آیا ویلاها به صورت روزانه اجاره داده می‌شوند؟</li>
+        <li>
+            <a>
+                چطور ویلا رزرو کنم؟
+            </a>
+        </li>
+        <li>
+            <a>
+                چگونه پرداخت کنم؟
+            </a>
+        </li>
+        <li>
+            <a>                
+                آیا ویلاها به صورت روزانه اجاره داده می‌شوند؟
+            </a>
+        </li>
     </ul>
 </div>
+@code{
+    public void SelectOnFAQ(){
+        _homerightbarservice.UpdateToFAQ();
+    }
+}

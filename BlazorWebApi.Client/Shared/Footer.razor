@@ -1,14 +1,42 @@
 ﻿@inject IConfiguration Configuration
-
-<nav class="navbar navbar-light bg-light">
-    <span class="navbar-brand mb-0 h1">@Configuration["Footer"] @year </span>
-</nav>
-
-@code{
-    string year = "";
-    protected override void OnInitialized()
-    {
-        year = DateTime.Now.Year.ToString();
-        base.OnInitialized();
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* تضمین می‌کند که ارتفاع کل صفحه در نظر گرفته شود */
     }
+
+    .main-content {
+        flex: 1; /* فضای باقی‌مانده بین هدر و فوتر را پر می‌کند */
+        padding: 20px;
+        background-color: white;
+    }
+
+    footer {
+        background-color: aliceblue;
+        color: gray;
+        text-align: center;
+        padding: 10px 0;
+    }
+</style>
+
+
+
+
+<footer>
+    <p>© 2024 تمامی حقوق محفوظ است.</p>
+</footer>
+
+
+
+
+@code {
+    // string year = "";
+    // protected override void OnInitialized()
+    // {
+    //     year = DateTime.Now.Year.ToString();
+    //     base.OnInitialized();
+    // }
 }

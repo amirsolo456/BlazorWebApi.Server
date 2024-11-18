@@ -1,30 +1,39 @@
 ﻿<style>
-/* 
-    .sidebar-container{
-        background-color: black;
-    } */
+
     #carouselExampleControls {
-        max-width: 80%; /* حداکثر عرض اسلایدر را تنظیم می‌کند */
+        max-width: 100%; /* حداکثر عرض اسلایدر را تنظیم می‌کند */
         max-height: 400px; /* حداکثر ارتفاع اسلایدر */
         overflow: hidden; /* هر چیزی که از اسلایدر بیرون برود، مخفی می‌شود */
         margin: 0 auto; /* مرکز قرار دادن اسلایدر با استفاده از margin */
         overflow: hidden; /* مخفی کردن محتوای اضافی */
+        box-shadow: -1px 1px 10px;
+        border-radius: 10px; /* گرد کردن گوشه‌ها */
         position: relative;
-        
+        z-index: 0;
     }
 
     .carousel-inner {
         max-height: 500px; /* محدود کردن ارتفاع کادر داخلی اسلایدر */
+        position: relative;
+        z-index: 0;
     }
 
     .carousel-item img {
         border-radius: 15px; /* برای گرد کردن 4 گوشه */
-
         width: 100%;
         height: 400px; /* تصویر به طور خودکار ارتفاع را به اندازه کادر تنظیم می‌کند */
         object-fit: cover; /* تصویر به اندازه کادر اسلایدر تغییر اندازه داده می‌شود */
+        position: relative;
+        z-index: 0;
+    }
+
+    .carousel-control-prev{
+        position: relative;
+        z-index: 0;
     }
 </style>
+
+
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
         <div class="carousel-item active">
@@ -52,3 +61,10 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+
+<script>
+        $(window).scroll(function(){
+        $("#carouselExampleControls").css("opacity", 1 - $(window).scrollTop() / 700);
+    });
+
+</script>

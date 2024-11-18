@@ -60,6 +60,16 @@ namespace BlazorWebApi.InfraStructure.Repository
             else return query.Where(c => c.ID == id).FirstOrDefault();
         }
 
+        public Customer GetByUserPass(string User, string Password)
+        {
+          var item = _Context.tblCustomers.FirstOrDefault(c => (c.Username.ToLower() == User.ToLower() || c.EmailAddres.ToLower() == User.ToLower()) && c.Password == Password);
+            if (item != null)
+            {
+                return item;
+            }
+            else return null;
+        }
+
         public int GetCount()
         {
             return _Context.tblCustomers.Count();

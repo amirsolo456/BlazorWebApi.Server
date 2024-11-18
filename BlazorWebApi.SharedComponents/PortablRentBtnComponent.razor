@@ -1,0 +1,60 @@
+﻿<style>
+    .rounded {
+        width: 300px;
+        background-color: #029a49;
+        display: flex;
+        position: fixed; /* دکمه را در موقعیت ثابت قرار می‌دهد */
+        bottom: 20px; /* فاصله از پایین صفحه */
+        left: 20px;
+        padding: 10px;
+        border-radius: 28px !important;
+        border: none;
+        z-index: 999;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s; /* انیمیشن تغییر رنگ و بزرگ شدن */
+        align-items:center;
+        justify-content:center;
+        justify-items:center;
+        font-weight: 700;
+        line-height: 2.15;
+        font-family: IRANYekan,sans-serif;
+        font-size: 1.5rem;
+        color:white;
+    }
+
+        .rounded div:hover {
+            transform: scale(1.1);
+/*             background-color: forestgreen;
+ */            color: white;
+            font-size: 16px;
+        }
+
+    .rounded-items {
+        display: flex;
+    }
+
+    .space {
+        width: 20px;
+        height: max-content;
+    }
+
+</style>
+
+<div class="rounded">
+    <div class="rounde-items" style="display:flex">
+        برای ویلات
+        <div class="space">
+        </div>
+        <div class="">
+            مشتری پیدا کن
+        </div>
+        <div class="">
+        </div>
+
+    </div>
+</div>
+
+@code {
+
+}

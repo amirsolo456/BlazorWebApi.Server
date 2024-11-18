@@ -124,6 +124,11 @@ namespace BlazorWebApi.InfraStructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("PhNumber")
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
@@ -131,6 +136,11 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     b.Property<DateTime?>("SighnUpDate")
                         .HasMaxLength(30)
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ID");
 
@@ -370,6 +380,9 @@ namespace BlazorWebApi.InfraStructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsOffer")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsReserved")
                         .HasColumnType("bit");
 
                     b.Property<bool>("Jacuzzi")

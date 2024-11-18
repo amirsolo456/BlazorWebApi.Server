@@ -1,0 +1,88 @@
+﻿@* <!-- اسلایدر Swiper -->
+<div class="swiper-container rounded-xl flex justify-center overflow-hidden w-full">
+    <div class="swiper-wrapper">
+        <!-- اسلاید اول -->
+        <div class="swiper-slide flex justify-center">
+            <div class="relative flex flex-col justify-center items-center w-full h-auto">
+                <!-- تصویر اول -->
+                <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?crop=entropy&cs=tinysrgb&fit=max&ixid=MnwzNjg2OXwwfDF8c2VhcmNofDI0fHxwZWFjdWx8ZW58MHx8fHwxNjk3MTI3OTQ5&ixlib=rb-1.2.1&q=80&w=1080"
+                     alt="Slide Image"
+                     class="rounded-full object-cover w-24 h-24" />
+                <!-- نشان پایین اسلاید -->
+                <div class="absolute left-0 right-0 bottom-0 flex justify-center mb-2">
+                    <span class="bg-white border-solid border-2 border-white rounded-md text-caption-strong text-neutral-800 text-center w-max p-1">
+                        New
+                    </span>
+                </div>
+                <p class="mt-2 text-caption text-center text-neutral-800">
+                    Slide Caption 1
+                </p>
+            </div>
+        </div>
+
+        <!-- اسلاید دوم -->
+        <div class="swiper-slide flex justify-center">
+            <div class="relative flex flex-col justify-center items-center w-full h-auto">
+                <!-- تصویر دوم -->
+                <img src="https://images.unsplash.com/photo-1549366029-7fa77b396315?crop=entropy&cs=tinysrgb&fit=max&ixid=MnwzNjg2OXwwfDF8c2VhcmNofDk3fHxwZWFjdWx8ZW58MHx8fHwxNjk3MTI3OTQ5&ixlib=rb-1.2.1&q=80&w=1080"
+                     alt="Slide Image"
+                     class="rounded-full object-cover w-24 h-24" />
+                <!-- نشان پایین اسلاید -->
+                <div class="absolute left-0 right-0 bottom-0 flex justify-center mb-2">
+                    <span class="bg-white border-solid border-2 border-white rounded-md text-caption-strong text-neutral-800 text-center w-max p-1">
+                        Sale
+                    </span>
+                </div>
+                <p class="mt-2 text-caption text-center text-neutral-800">
+                    Slide Caption 2
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- دایره‌های پیمایش (pagination) -->
+    <div class="swiper-pagination"></div>
+</div>
+
+<!-- اسکریپت Swiper برای فعالسازی اسلایدر -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+      loop: true,  // برای تکرار اسلایدها
+      autoplay: {
+        delay: 3000, // تغییر اسلاید هر 3 ثانیه
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true, // امکان کلیک روی دایره‌های پیمایش
+      },
+    });
+</script>
+
+<!-- استایل‌های اضافی (CSS) -->
+<style>
+    .swiper-container {
+        width: 100%;
+        height: auto;
+    }
+
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .rounded-xl {
+        border-radius: 15px;
+    }
+
+    .text-caption {
+        font-size: 12px;
+        color: #333;
+    }
+
+    .text-caption-strong {
+        font-weight: bold;
+    }
+</style>
+ *@

@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+@* <html>
+<head> *@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    body {
+        margin: 0;
+        font-family: Tahoma, sans-serif;
+        display: grid;
+        grid-template-columns: auto 300px; /* تقسیم‌بندی صفحه */
+        height: 100vh; /* کل ارتفاع صفحه */
+        background-color: gray;
+    }
+
+    .sidenav {
+        background-color: #111;
+        color: white;
+        overflow: hidden; /* مخفی کردن اسکرول اضافی */
+        padding: 10px;
+        width: 200px;
+        height: 100%; /* ارتفاع کامل ستون سایدبار */
+        border-radius: 3%;
+        z-index: 1;
+        position: fixed;
+        height: 100%;
+        width: 200px;
+        opacity: 0; /* مقدار شفافیت پیش‌فرض */
+        border:1px solid red ;
+        /*         top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            padding-top: 20px; */
+    }
+
+        .sidenav a {
+            display: block;
+            padding: 10px;
+            color: #818181;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidenav a, .dropdown-btn {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: right;
+            cursor: pointer;
+            outline: none;
+        }
+
+            .sidenav a:hover {
+                color: #f1f1f1;
+            }
+
+        .sidenav:hover {
+            opacity: 1; /* شفافیت کامل وقتی موس روی سایدبار است */
+        }
+
+    .content {
+        background-color: #f4f4f4; /* رنگ پس‌زمینه برای بخش محتوای اصلی */
+        padding: 20px;
+        overflow-y: auto; /* اسکرول فقط برای محتوای اصلی */
+    }
+
+    .dropdown-container {
+        display: none;
+        background-color: #262626;
+        padding-left: 8px;
+    }
+
+    .fa-caret-down {
+        float: right;
+        padding-right: 8px;
+    }
+
+</style>
+@* </head>
+<body> *@
+
+<div class="sidenav" dir="rtl">
+    <div style="color:aliceblue">
+        <BlazorWebApi.SharedComponents.SideBars.HomeRight.UserInfo />
+    </div>
+    <button class="dropdown-btn">
+        پیام ها
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="#">پیام مالکین</a>
+        <a href="#">پیام مشتریان</a>
+        <a href="#">کل</a>
+    </div>
+    <button class="dropdown-btn">
+        ویلا ها
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="#">مدیریت ویلا</a>
+        @*         <a href="#">پیام مشتری</a>
+        <a href="#">کل</a> *@
+    </div>
+    <button class="dropdown-btn">
+        مدیریت
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="#">مدیریت مالکین</a>
+        <a href="#">مدیریت مشتریان</a>
+        <a href="#">کل</a>
+    </div>
+    @*     <a href="#services">Services</a>
+    <a href="#clients">Clients</a>
+    <a href="#contact">Contact</a> *@
+    @*     <button class="dropdown-btn">
+        Dropdown
+        <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+    </div> *@
+    <a href="#contact">Search</a>
+</div>
+
+@*     <div class="main">
+        <h2>Sidebar Dropdown</h2>
+        <p>Click on the dropdown button to open the dropdown menu inside the side navigation.</p>
+        <p>This sidebar is of full height (100%) and always shown.</p>
+        <p>Some random text..</p>
+    </div> *@
+
+<script>
+    /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+    for (i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.display === "block") {
+          dropdownContent.style.display = "none";
+        } else {
+          dropdownContent.style.display = "block";
+        }
+      });
+    }
+</script>
+@* </body>
+</html> *@

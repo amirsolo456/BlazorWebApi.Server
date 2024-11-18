@@ -18,9 +18,18 @@ namespace BlazorWebApi.InfraStructure.Repository
         }
         public bool AddLog(LoginLog loginLog)
         {
-            _dbcontext.tblLoginLog.Add(loginLog);
-            _dbcontext.SaveChanges();
-            return true;
+            try
+            {
+                _dbcontext.tblLoginLog.Add(loginLog);
+                _dbcontext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+
         }
 
         public bool DeleteLog(int ID)

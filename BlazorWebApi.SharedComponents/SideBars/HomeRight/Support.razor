@@ -1,7 +1,27 @@
-﻿<!-- Support.razor -->
+﻿@inject HomeRightSideBarService _homerightsideservice
+<style>
+    .sidebar-section{
+        font-family: Tahoma;
+        background-color:white;
+        padding-bottom:25px;
+    }
+</style>
+<!-- Support.razor -->
 <div class="sidebar-section">
-    <h4>پشتیبانی</h4>
-    <p>برای دریافت پشتیبانی با ما تماس بگیرید.</p>
-    <p>ایمیل: support@example.com</p>
-    <p>تلفن: 123-456-789</p>
+    <div class="sidebar-item">
+        <a href="javascript:void(0)" class="sidebar-link" @onclick="OnSupport">
+            <h4><i class="bi bi-house-door"></i> پشتیبانی</h4>
+        </a>
+        <div style="margin-right:25px">
+            <p>برای دریافت پشتیبانی با ما تماس بگیرید.</p>
+            <p>ایمیل: support@example.com</p>
+            <p>تلفن: 123-456-789</p>
+        </div>
+    </div>
 </div>
+@code {
+    public void OnSupport()
+    {
+        _homerightsideservice.UpdateToSupport();
+    }
+}

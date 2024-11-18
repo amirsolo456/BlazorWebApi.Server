@@ -27,6 +27,12 @@ namespace BlazorWebApi.Server.Controllers
             return _CustomerService.GetByID(ID, Includeprop);
         }
 
+        [HttpGet("userlogin/{user},{pass}")]
+        public Customer GetByUserPass(string user,string pass)
+        {
+            return _CustomerService.GetByUserPass(user, pass);
+        }
+
         [HttpGet]
         public int GetCount()
         {

@@ -66,6 +66,11 @@ namespace BlazorWebApi.Infrastructure.Repository
             return query;
         }
 
+        public IEnumerable<Villa> GetNotReservedVillas()
+        {
+            return _context.tblVillas.Where(c => c.IsReserved == false);
+        }
+
         public IEnumerable<Villa> GetVillaByCategoryID(int Type, int CategoryID)
         {
             IQueryable<Villa> db = _context.tblVillas.AsQueryable();

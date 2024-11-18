@@ -1,0 +1,122 @@
+﻿@inject HttpClient _HttpClient
+
+<style>
+    .box-container {
+        height: 500px;
+        width: 1400px;
+        background-color: indianred;
+        margin: auto;
+        max-width:1000px;
+        border-radius:5px;
+        margin-top:25px;
+        margin-bottom:25px;
+    }
+
+    .box-intro {
+        padding: 20px;
+        display: flex; /* استفاده از فلکس‌ باکس */
+/*         flex-wrap: wrap; /* در صورتی که آیتم‌ها جا نشوند، به خط بعد بروند */
+ */        gap: 15px; /* فاصله بین آیتم‌ها */
+        justify-content: flex-start; /* آیتم‌ها از سمت چپ شروع می‌شوند */
+        overflow-x: auto; /* اسکرول افقی در صورت کمبود فضا */
+        white-space: nowrap; /* جلوگیری از شکستن آیتم‌ها به خط بعدی */
+    }
+
+        .box-intro::-webkit-scrollbar {
+            height: 8px; /* ارتفاع اسکرول بار */
+        }
+
+        .box-intro::-webkit-scrollbar-thumb {
+            background: #ccc; /* رنگ اسکرول بار */
+            border-radius: 4px; /* گوشه‌های گرد */
+        }
+
+        .box-intro::-webkit-scrollbar-track {
+            background: #f4f4f4; /* پس‌زمینه اسکرول بار */
+        }
+
+        .box-intro .items:first-child {
+            margin-right: 200px;
+        }
+
+    .items {
+        flex: 0 0 auto;
+        padding: 10px;
+        margin:5px;
+        background-color: white;
+        max-width: 400px; /* حداکثر عرض آیتم */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        text-align: center;
+
+    }
+
+    .tittle {
+        text-align: center;
+        margin: auto;
+        font-family: Tahoma;
+        margin-left:10px;
+    }
+
+    .text-container {
+        margin: auto;
+        flex-direction: column; /* آیتم‌ها به‌صورت عمودی چیده شوند */
+                 width:400px;
+  /*               height:500px; */ 
+        justify-content: flex-start; /* آیتم‌ها از سمت چپ شروع می‌شوند */
+    }
+
+    .subtittle{
+        margin-top: auto; /* این لینک را به پایین منتقل می‌کند */
+
+        padding-bottom: 10px; /* فاصله‌ای از پایین ایجاد می‌کند */
+    }
+</style>
+
+<div class="box-container">
+
+
+    <div class="box-intro">
+        <div class="text-container">
+            <h4 class="tittle">
+               
+                    پیشنهاد<br />
+                    شگفت<br />
+                    انگیز<br />
+             
+            </h4>
+            <a class="subtittle" href="#">
+                مشاهده همه
+            </a>
+        </div>
+
+        @if (Villas != null && Villas.Any())
+        {
+
+            @foreach (Villa item in Villas)
+            {
+                <div class="items">
+                    <BlazorWebApi.SharedComponents.VillaItemComponent villa="item" IsMobile="false" />
+                </div>
+            }
+        }
+    </div>
+
+</div>
+
+@code {
+    public IEnumerable<Villa>? Villas { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Villas = await _HttpClient.GetFromJsonAsync<IEnumerable<Villa>>("/api/Villa");
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("خطا در هنگام گرفتن اطلاعات ویلا");
+        }
+
+        await base.OnInitializedAsync();
+    }
+}

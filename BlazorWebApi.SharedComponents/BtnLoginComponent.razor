@@ -1,0 +1,232 @@
+﻿<style>
+
+    .profile-menu-container {
+        /*         justify-content: center !important;
+            justify-items: center;
+            align-content: center; */
+        position: relative;
+        z-index: 9999;
+    }
+
+    .container1 {
+        position: relative;
+        z-index: 9999;
+        display: flex;
+        justify-content: space-between; /* یا center برای وسط */
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px; /* برای یکنواختی */
+        font-family: Tahoma, sans-serif;
+        font-size: 14px;
+        gap: 10px;
+        max-height:60px;
+    }
+
+    .intro1 {
+        position: relative;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
+        max-height: 100%;
+        max-width: 30%;
+    }
+
+    .icon {
+        width: 100%;
+        height: 24px;
+        font-size: 14px;
+        font-weight: normal;
+        color: var(--color-icon-high-emphasis);
+    }
+
+    .intro2 {
+        position: relative;
+        cursor: pointer;
+        flex-shrink: 0;
+        max-height: 100%;
+        max-width: 50%;
+    }
+
+    .intro3 {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        max-height: 100%;
+        width: 20%;
+        max-width: 20%;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .profile {
+        display: flex;
+        margin-right: 0px;
+        width: 80%;
+        height: 100%;
+    }
+
+    .profile1 {
+        display: flex;
+        margin-left: 0px;
+        width: 20%;
+        height: 100%;
+    }
+
+    .profile-menu-button {
+        position: relative;
+        z-index: 9999;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        justify-content: center;
+        justify-items: center;
+        align-content: center;
+        width: 100%;
+        padding-right: 5px;
+        height: 100%;
+    }
+
+        .profile-menu-button:hover {
+            background-color: #0056b3;
+        }
+
+    
+
+   .a {
+        position: relative;
+        top: 200px;
+        left: 70px;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        width: 200px;
+        height:400px;
+     /*    position: relative; */
+        z-index: 99999;
+    }
+
+
+    #profile-dropdown-menu {
+        position: relative ;
+        top: 200px;
+        left: 70px;
+        z-index: 9999; /* مقدار بالاتر از همه عناصر دیگر */
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* نمایش واضح */
+        border-radius: 8px;
+        min-width: 200px;
+        min-height:400px;
+        border:2px solid ;
+
+        /* عرض دلخواه */
+/*         z-index: 99999;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        z-index: 9999;
+        width: 200px; */
+    }
+
+        #profile-dropdown-menu ul {
+            display: flex; /* اضافه کردن flex برای چیدمان */
+            flex-direction: column; 
+            list-style: none;
+            margin: 0;
+            position:relative;
+            z-index:9999;
+        }
+
+        #profile-dropdown-menu li {
+            padding:0 !important;
+            border-bottom: 1px solid #ddd;
+            width: 100%;
+        }
+
+            #profile-dropdown-menu li:last-child {
+                border-bottom: none;
+            }
+
+        #profile-dropdown-menu a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+            padding: 10px;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+            #profile-dropdown-menu a:hover {
+                background-color: #f0f0f0;
+            }
+
+</style>
+
+
+<div class="profile-menu-container">
+    <div class="container1">
+
+        <a class="intro1">
+            <div style="display:flex;">
+                <div class="icon">
+                    هشدار ها
+                </div>
+            </div>
+        </a>
+        <div class="intro2">
+            <div class="profile">
+                <button id="profile-menu-button" class="profile-menu-button">پروفایل</button>
+            </div>
+            <div id="profile-dropdown-menu" class="a">
+                <ul>
+                    <li><a href="/profile/">پروفایل</a></li>
+                    <li><a href="/digiclub/">دیجی‌کلاب</a></li>
+                    <li><a href="/plus/landing/">پلاس</a></li>
+                    <li><a href="/profile/orders/">سفارش‌ها</a></li>
+                    <li><a href="/profile/lists/">لیست‌ها</a></li>
+                    <li><a href="/profile/comments/">دیدگاه‌ها و پرسش‌ها</a></li>
+                    <li><a href="/profile/notification/">پیام‌ها</a></li>
+                    <li><a href="/logout">خروج</a></li>
+                </ul>
+            </div>
+        </div>
+        <span style="width: 1px; height: 50px; background-color: #ccc; margin: 0 10px;"></span>
+        <div class="intro3">
+            <div style=" position:relative ; height:100% ; width:100% ; justify-content:center ; text-align:center ; align-items:center ; top:25% ; margin-top:4px;">
+                خرید ها
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // دریافت دکمه و منو
+    const profileButton = document.getElementById("profile-menu-button");
+    const dropdownMenu = document.getElementById("profile-dropdown-menu");
+
+    // افزودن رویداد کلیک به دکمه
+    profileButton.addEventListener("click", () => {
+        // تغییر نمایش منو
+        dropdownMenu.hidden = !dropdownMenu.hidden;
+    });
+
+    // بستن منو وقتی در جایی خارج از آن کلیک شود
+    document.addEventListener("click", (event) => {
+        // چک کردن کلیک خارج از دکمه و منو
+        if (!profileButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.hidden = true;
+        }
+    });
+
+</script>

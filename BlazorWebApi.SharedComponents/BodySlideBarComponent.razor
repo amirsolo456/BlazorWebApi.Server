@@ -1,0 +1,248 @@
+﻿<style>
+
+    * {
+        margin: 0;
+/*         padding: 0; */
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: transparent;
+    }
+
+    .slider-container-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+    }
+
+    .slider-container {
+        width: 90%;
+        height: 100px;
+        overflow-x: auto;
+        display: flex;
+        align-items: center;
+        scroll-behavior: smooth; /* برای حرکت نرم */
+        margin-top:20px;
+        margin-bottom: 20px;
+    }
+
+    .slider {
+        display: flex;
+        gap: 55px; /* فاصله بین هر آیکون */
+        margin:auto;
+    }
+
+    .slider-item {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .image-container {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-bottom: 5px;
+        margin:auto;
+    }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .caption {
+        font-size: 12px;
+        color: #555;
+        text-align: center;
+        margin-top: 5px;
+    }
+
+    .nav-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+    }
+
+        .nav-button.prev {
+            left: 10px;
+        }
+
+        .nav-button.next {
+            right: 10px;
+        }
+
+        .nav-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+    .slider-container::-webkit-scrollbar {
+        display: none; /* مخفی کردن اسکرول بار */
+    }
+
+
+</style>
+
+<head>
+
+<div class="slider-container">
+    <div class="slider-container-wrapper">
+        <button class="nav-button prev" onclick="scrollSlider(-1)">&#10094;</button>
+        <div class="slider-container">
+            <div class="slider">
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/d6432c6d313d2aa48dc257d1d8806aa43a1cb235_1731844040.png" alt="منتخب ترین ها">
+                    </div>
+                    <span class="caption">بلک فرایدی</span>
+                </a>
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/e4de6f360fcda4f501f21419ba40a100460740cd_1727699701.png" alt="پرداخت های قسطی">
+                    </div>
+                    <span class="caption">دریافت وام</span>
+                </a>
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/33ed3240e53d76c605ac9a0ba359be2a560089fb_1727769445.png" alt="کارت هدیه">
+                    </div>
+                    <span class="caption">کارت هدیه</span>
+                </a>
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/d6432c6d313d2aa48dc257d1d8806aa43a1cb235_1731844040.png" alt="بلک فرایدی">
+                    </div>
+                    <span class="caption">بلک فرایدی</span>
+                </a>
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/e4de6f360fcda4f501f21419ba40a100460740cd_1727699701.png" alt="بهترین ویو ها">
+                    </div>
+                    <span class="caption">دریافت وام</span>
+                </a>
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/33ed3240e53d76c605ac9a0ba359be2a560089fb_1727769445.png" alt="بهترین مناطق">
+                    </div>
+                    <span class="caption">کارت هدیه</span>
+                </a>
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/d6432c6d313d2aa48dc257d1d8806aa43a1cb235_1731844040.png" alt="پر امکانات ترین ها">
+                    </div>
+                    <span class="caption">بلک فرایدی</span>
+                </a>
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/e4de6f360fcda4f501f21419ba40a100460740cd_1727699701.png" alt="ارزان ترین ها">
+                    </div>
+                    <span class="caption">دریافت وام</span>
+                </a>
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/33ed3240e53d76c605ac9a0ba359be2a560089fb_1727769445.png" alt="کارت هدیه">
+                    </div>
+                    <span class="caption">کارت هدیه</span>
+                </a>
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/d6432c6d313d2aa48dc257d1d8806aa43a1cb235_1731844040.png" alt="بلک فرایدی">
+                    </div>
+                    <span class="caption">بلک فرایدی</span>
+                </a>
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/e4de6f360fcda4f501f21419ba40a100460740cd_1727699701.png" alt="دریافت وام">
+                    </div>
+                    <span class="caption">دریافت وام</span>
+                </a>
+                <a href="#" class="slider-item">
+                    <div class="image-container">
+                        <img src="https://dkstatics-public.digikala.com/digikala-bellatrix/33ed3240e53d76c605ac9a0ba359be2a560089fb_1727769445.png" alt="کارت هدیه">
+                    </div>
+                    <span class="caption">کارت هدیه</span>
+                </a>
+                <!-- آیتم‌های دیگر -->
+            </div>
+        </div>
+        <button class="nav-button next" onclick="scrollSlider(1)">&#10095;</button>
+    </div>
+    <script src="script.js"></script>
+</div>
+
+</head>
+<script>
+
+        function scrollSlider(direction) {
+        const sliderContainer = document.querySelector('.slider-container');
+        const scrollAmount = 100; // میزان اسکرول به پیکسل
+
+        if (direction === 1) {
+            sliderContainer.scrollLeft += scrollAmount;
+        } else if (direction === -1) {
+            sliderContainer.scrollLeft -= scrollAmount;
+        }
+    }
+
+</script>
+@* <script src="script.js"></script>
+ *@
+
+@* <script>
+        let currentIndex = 0;
+
+    function showSlide(index) {
+        const slides = document.querySelectorAll('.slide');
+        if (index >= slides.length) {
+            currentIndex = 0;
+        } else if (index < 0) {
+            currentIndex = slides.length - 1;
+        } else {
+            currentIndex = index;
+        }
+
+        slides.forEach((slide, i) => {
+            slide.classList.remove('active');
+            if (i === currentIndex) {
+                slide.classList.add('active');
+            }
+        });
+    }
+
+    function nextSlide() {
+        showSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentIndex - 1);
+    }
+
+    // Initialize first slide
+    showSlide(currentIndex);
+
+    // Auto-change slide every 3 seconds
+    setInterval(nextSlide, 3000);
+
+</script> *@

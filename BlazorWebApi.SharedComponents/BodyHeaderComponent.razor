@@ -1,0 +1,232 @@
+﻿
+@inject HttpClient _httpClient
+
+<style>
+    .topnav {
+/*         overflow: hidden; */
+        /*         background-color: aliceblue;
+     */ direction: rtl;
+        z-index: 9999;
+        font-family: Tahoma;
+        font-size: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        position: relative;
+    }
+
+        .topnav a {
+            float: left;
+            color: dimgray;
+            text-align: center;
+            padding: 14px 15px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+            .topnav a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+            .topnav a.active {
+                background-color: #04AA6D;
+                color: white;
+            }
+
+    .topnav-right {
+        float: right;
+        margin-right: 50px;
+        display: flex;
+        align-items: center;
+    }
+
+    .topnav-left {
+        float: left;
+        margin-left: 50px;
+    }
+
+    .active {
+        background-color: #04AA6D;
+        color: white;
+    }
+
+    .find-nav {
+        display: flex;
+        margin: auto;
+        margin-top: 10px;
+    }
+
+        .find-nav button:hover {
+            transform: scale(1.1);
+            background-color: aqua;
+            border-radius: 2px;
+        }
+
+    /* مخفی کردن منو در حالت پیش‌فرض */
+    .hidden {
+        display: none;
+    }
+
+</style>
+
+@* @if(loginid == 1){
+    <BlazorWebApi.SharedComponents.UserLoginComponent @ref=userLoginComponent />
+    loginid = 0;
+} *@
+
+<div class="row" style="margin:auto !important; border-radius:5px !important;">
+    <a href="javascript:void(0)">
+        <button class="btnFont btnSize btn btn-outline " style="margin:auto ; border-radius:5px;" @onclick="Openmodal">ورود / عضویت</button>
+        <BlazorWebApi.SharedComponents.UserLoginComponent @ref=userLoginComponent>
+
+        </BlazorWebApi.SharedComponents.UserLoginComponent>
+
+    </a>
+</div>
+
+
+<div class="topnav">
+    <div class="topnav-right">
+        <img src="" />
+    </div>
+</div>
+<div class="topnav">
+    <div class="topnav-left">
+        <a href="#about">تماس با ما</a>
+    </div>
+    <div class="topnav-right">
+        <a href="/" id="homeLink">
+            خانه
+        </a>
+        <a href="/VillaIndex" id="dashboardLink">
+            داشبورد
+        </a>
+        <a href="/cart" id="cartLink">
+            سبد خرید
+        </a>
+    </div>
+</div>
+<div class="topnav">
+    <div style="width:90%">
+        <div class="topnav-right">
+            <div class="find-nav">
+                <a href="#about">جستجو</a>
+                <input style="margin-top:10px; margin-right:50px ; height:30px; width:400px;" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="btn-login" style="width:10%; left:2px !important">
+        <BlazorWebApi.SharedComponents.BtnLoginComponent />
+
+    </div>
+
+</div>
+
+
+
+
+@* <div class="profile-menu-container">
+    <button id="profile-menu-button" class="profile-menu-button">پروفایل</button>
+    <div id="profile-dropdown-menu" class="profile-dropdown-menu hidden">
+        <ul>
+            <li><a href="/profile/">پروفایل</a></li>
+            <li><a href="/digiclub/">دیجی‌کلاب</a></li>
+            <li><a href="/plus/landing/">پلاس</a></li>
+            <li><a href="/profile/orders/">سفارش‌ها</a></li>
+            <li><a href="/profile/lists/">لیست‌ها</a></li>
+            <li><a href="/profile/comments/">دیدگاه‌ها و پرسش‌ها</a></li>
+            <li><a href="/profile/notification/">پیام‌ها</a></li>
+            <li><a href="/logout">خروج</a></li>
+        </ul>
+    </div>
+</div> *@
+
+
+
+<script>
+        // برای نمایش و مخفی کردن منو
+
+
+
+
+    window.onload = function() {
+    const links = document.querySelectorAll('.topnav a');
+
+    // بازیابی لینک فعال از LocalStorage
+    const activeLink = localStorage.getItem('activeLink');
+    if (activeLink) {
+    // جستجو برای لینک با href مناسب
+    const link = document.querySelector(`.topnav a[href='${activeLink}']`);
+    if (link) {
+    link.classList.add('active');
+    }
+    }
+
+    // اضافه کردن رویداد کلیک به هر لینک
+    links.forEach(link => {
+    link.addEventListener('click', (event) => {
+    // ذخیره مسیر لینک در LocalStorage
+    localStorage.setItem('activeLink', link.getAttribute('href'));
+
+    // حذف کلاس active از همه لینک‌ها
+    links.forEach(l => l.classList.remove('active'));
+
+    // اضافه کردن کلاس active به لینک کلیک‌شده
+    link.classList.add('active');
+    });
+    });
+    };
+</script>
+
+@code {
+    int loginid = 0;
+}
+@functions {
+    private void changeloginid()
+    {
+        loginid = 1;
+        StateHasChanged();
+    }
+
+}
+
+@* 
+(
+<span>
+                    @if (shoppingCartCountModel != null)
+                {
+                    @shoppingCartCountModel.Count
+                }
+</span>
+            ) *@
+@*         <a class="" href="#">
+            <img style="max-width:50px ; max-height:18px" src="/@_Configuration["Sitelogo"]" />
+            @_Configuration["Title"]
+        </a> *@
+@* @code
+{
+    [CascadingParameter(Name = "ShoppingCartCountModel")]
+    private ShoppingCartCountModel? shoppingCartCountModel { get; set; }
+    int CustomerID = 1;
+    protected override async Task OnInitializedAsync()
+    {
+        if (shoppingCartCountModel != null)
+        {
+
+            shoppingCartCountModel.CountChange += async () =>
+            {
+                shoppingCartCountModel.Count = await _httpClient.GetFromJsonAsync<int>("/api/ShoppingCart/count");
+                StateHasChanged();
+            };
+
+        }
+        await base.OnInitializedAsync();
+    }
+
+
+} *@
+

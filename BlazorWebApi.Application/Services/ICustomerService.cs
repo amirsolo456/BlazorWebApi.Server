@@ -11,6 +11,7 @@ namespace BlazorWebApi.Application.Services
     {
         public IEnumerable<Customer> GetAll(bool IncludeProp =false);
         public Customer GetByID(int id, bool IncludeProp = false);
+        public Customer GetByUserPass(string User, string Password);
         public int GetCount();
 
         public bool AddCustomer(Customer customer);

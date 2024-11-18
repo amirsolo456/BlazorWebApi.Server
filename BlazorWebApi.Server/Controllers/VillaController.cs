@@ -52,6 +52,12 @@ namespace BlazorWebApi.Server.Controllers
             return _VillaService.GetVillaByCategoryID(IDType, CategoryID);
         }
 
+        [HttpGet("notreserved")]
+        public IEnumerable<Villa> GetNotreservedvillas()
+        {
+            return _VillaService.GetNotReservedVillas();
+        }
+
         [HttpPut]
         public void Update(Villa villa)
         {

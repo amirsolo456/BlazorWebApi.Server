@@ -1,0 +1,44 @@
+﻿<style>
+    /* دکمه پشتیبانی */
+    .support-button {
+        position: fixed; /* دکمه را در موقعیت ثابت قرار می‌دهد */
+        bottom: 20px; /* فاصله از پایین صفحه */
+        right: 20px; /* فاصله از راست صفحه */
+        padding: 10px; /* فاصله داخلی دکمه */
+        background-color:firebrick; /* رنگ پس‌زمینه دکمه قرمز */
+        border-radius: 50%; /* گوشه‌های دایره‌ای شکل برای دکمه */
+        border: none; /* برداشتن حاشیه */
+        z-index: 1000; /* قرار دادن دکمه در بالای سایر عناصر */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* سایه برای دکمه */
+        cursor: pointer; /* نشانگر موس به حالت دست تغییر می‌کند */
+        transition: background-color 0.3s, transform 0.3s; /* انیمیشن تغییر رنگ و بزرگ شدن */
+    }
+
+        /* تغییرات هنگام حرکت موس روی دکمه */
+        .support-button:hover {
+            background-color: #0056b3; /* تغییر رنگ پس‌زمینه هنگام هاور */
+            transform: scale(1.1); /* بزرگتر شدن دکمه هنگام هاور */
+        }
+
+        /* برای آیکون */
+        .support-button svg {
+            fill: white; /* رنگ آیکون سفید */
+        }
+
+</style>
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="support" viewBox="0 0 24 24">
+        <path fill-rule="evenodd" d="M18 17a4.001 4.001 0 01-3.14 3.907A3 3 0 1012 23h2a6 6 0 006-6v-.256a4.502 4.502 0 000-8.488V7a6 6 0 00-6-6h-4a6 6 0 00-6 6v1.256A4.502 4.502 0 005.5 17H7a1 1 0 001-1V9a1 1 0 00-1-1H6V7a4 4 0 014-4h4a4 4 0 014 4v1h-1a1 1 0 00-1 1v7a1 1 0 001 1h1zm.5-2H18v-5h.5a2.5 2.5 0 010 5zM6 10h-.5a2.5 2.5 0 000 5H6v-5zm7 10a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"></path>
+    </symbol>
+</svg>
+<button class="support-button">
+    <svg style="width: 24px; height: 24px; fill: var(--color-icon-white);">
+        <use xlink:href="#support"></use>
+    </svg>
+</button>
+
+
+
+@code {
+
+}

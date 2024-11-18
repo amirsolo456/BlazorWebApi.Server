@@ -2,6 +2,8 @@
 using Blazored.LocalStorage;
 using BlazorWebApi.Client;
 using BlazorWebApi.Client.Components;
+using BlazorWebApi.SharedComponents;
+using BlazorWebApi.SharedComponents.SideBars.HomeRight;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -22,6 +24,7 @@ builder.Services.AddScoped(h => httpClient);
 builder.Services.AddScoped<ToastrService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddSingleton<HomeRightSideBarService>();
 builder.Services.AddAuthorizationCore();
 //Serilog
 var levelSwitch = new Serilog.Core.LoggingLevelSwitch();
