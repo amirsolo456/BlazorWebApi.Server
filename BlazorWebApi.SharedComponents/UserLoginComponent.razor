@@ -4,41 +4,45 @@
 @inject HttpClient _httpclient
 @inject NavigationManager _navigate;
 @inject IJSRuntime _jsruntime
+@using Blazored.LocalStorage
+@inject ILocalStorageService _localStorage
 <script src="_content/BlazorWebApi.SharedComponents/UserLoginJS.js"></script>
 
 <style>
     .modal {
-    margin: auto;
-    color: black;
-    font-style: normal;
-    font-family:BYekan,Tahoma;   
-    border-radius:10px;
+    z-index: 110000;
     }
-
+    /* 
     .modal div:first-of-type:hover {
     transform: scale(1.01);
+    } */
+
+    .form-group {
+    margin-top: 25px;
     }
 
-    .form-group{
-        margin-top:25px;
-    }
-
-    button{
-        width:150px;
+    button {
+    width: 150px;
     }
 </style>
+
 
 <div class="modal fade" id="@id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-             @*    <h5 class="modal-title" id="staticBackdropLabel">@(ChildContent != null ? ChildContent : " ")</h5> *@
+                @*    <h5 class="modal-title" id="staticBackdropLabel">@(ChildContent != null ? ChildContent : " ")</h5> *@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div style="background-color:antiquewhite ; height:50px; justify-items:center ; justify-content:center ; border-radius:5px;box-shadow:-1px 1px 10px rgba(0,0,0,0.5)">
-                    <h2 style="font-family:Tahoma; margin-top:7px ;">ورود به پنل ادمین</h2>
+                <div class="row" style="display:flex">
+                    <div style="background-color:transparent ; height:50px; justify-items:start ; justify-content:start ; border-radius:5px;display:flex">
+                        <div style="width:20px; height:100%;border-radius:3px;background-color:tomato;margin-right:0px;">
+                        </div>
+                        <h2 style="font-family:Tahoma; margin-top:7px ;margin-right:5px;font-size:20px">ورود به حساب کاربری</h2>
+                    </div>
                 </div>
+
 
                 <EditForm Model="customer" OnValidSubmit="HandleLogin">
                     <DataAnnotationsValidator />
@@ -80,10 +84,21 @@
 </script>
 
 @code {
-    public Customer customer=new Customer();
+    public Customer customer = new Customer();
     private string LoginMessage = "";
+    public bool IsIN { get; set; } = false;
 }
 @functions {
+    protected override async Task OnInitializedAsync()
+    {
+        string? token = await _localStorage.GetItemAsync<string>("authToken");
+        if (!string.IsNullOrEmpty(token))
+            IsIN = true;
+        else IsIN = false;
+
+        await base.OnInitializedAsync();
+    }
+
     private async void HandleLogin()
     {
         if (!string.IsNullOrEmpty(customer.EmailAddres))

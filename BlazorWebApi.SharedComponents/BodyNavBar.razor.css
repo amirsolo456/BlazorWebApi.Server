@@ -1,0 +1,82 @@
+﻿
+/* استایل برای افکت روشن خاموش */
+.fade-effect {
+
+    animation: fadeInOut 1s infinite; /* نام انیمیشن، مدت زمان، و تکرار بی‌نهایت */
+}
+
+@-webkit-keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0; /* کاملاً ناپدید */
+    }
+
+    50% {
+        opacity: 1; /* کاملاً قابل مشاهده */
+    }
+}
+
+
+/*.fade-effect {
+    animation: fadeInOut 2s infinite;*/ /* انیمیشن تعریف شده */
+/*}*/
+
+
+
+.navbar {
+    background-color: white !important;
+    border: 1px solid;
+    border-color: gray;
+    border-radius: 10px;
+}
+
+.collapse, .navbar-nav, .navbar-collapse {
+    display: flex;
+    position: relative;
+}
+
+    .navbar-nav .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 8px; /* فاصله بین آیکون و متن */
+    }
+
+        .navbar-nav .nav-item i {
+            font-size: 1.2rem; /* اندازه آیکون */
+        }
+
+    .navbar-nav .nav-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: black;
+        gap:20px;
+    }
+
+        .navbar-nav .nav-link:hover {
+            color: #0056b3; /* رنگ متن هنگام هاور */
+        }
+
+.dropdown-menu{
+    height:300px;
+    justify-content:center;
+   
+}
+
+.dropdown-li {
+    margin-right: 10px !important;
+    margin-left: 10px !important;
+    height:40px;
+}
+
+
+.dropdown-item {
+    
+    text-align:start;
+    height:100%;
+    border-bottom: 1px solid #ddd;
+    /*    margin-right:10px;
+    margin-left:10px;
+    max-width:100%;
+    overflow:hidden;*/
+}
+

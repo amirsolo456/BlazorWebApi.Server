@@ -71,6 +71,11 @@ namespace BlazorWebApi.Infrastructure.Repository
             return _context.tblVillas.Where(c => c.IsReserved == false);
         }
 
+        public IEnumerable<Villa> GetVillaByBest()
+        {
+            return _context.tblVillas.OrderByDescending(c => c.Score);
+        }
+
         public IEnumerable<Villa> GetVillaByCategoryID(int Type, int CategoryID)
         {
             IQueryable<Villa> db = _context.tblVillas.AsQueryable();
@@ -98,6 +103,11 @@ namespace BlazorWebApi.Infrastructure.Repository
         public IEnumerable<Villa> GetVillaByOffers()
         {
             return _context.tblVillas.Where(c => c.IsOffer == true);
+        }
+
+        public IEnumerable<Villa> GetVillaByTakhfif()
+        {
+            return _context.tblVillas.Where(c => c.TakhfifPerNight > 0 || c.TakhfifPerAllNights > 0);
         }
 
         public bool SaveChanges()

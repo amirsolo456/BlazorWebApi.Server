@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlazorWebApi.Domain.Entities.Shared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -25,6 +26,9 @@ namespace BlazorWebApi.Domain.Entities
         [Display(Name = "مساحت")]
         [Range(10, 10000)]
         public int Sqft { get; set; }
+        [Display(Name = "امتیاز")]
+        [Range(10, 10000)]
+        public int Score { get; set; }
         [Display(Name = "تعداد اتاق")]
         [Range(0, 10)]
         public int Occupancy { get; set; }
@@ -55,5 +59,16 @@ namespace BlazorWebApi.Domain.Entities
         public int? VillaCategory4 { get; set; }
         public int? VillaCategory5 { get; set; }
         public bool IsReserved { get; set; } = false;
+        public ICollection<Comments> Comments { get; set; }
+    }
+
+    public enum VillaType
+    {
+        خانه_باغ = 1,    // خانه باغ
+        بوم_گردی = 2,  // ویلا ساحلی
+        ویلا_لوکس = 3,  // ویلا جنگلی
+        هتل = 4,  // ویلا کوهستانی
+        میهمانسرا = 5,    // ویلا مدرن
+        سوئیت = 6   // ویلا تاریخی
     }
 }

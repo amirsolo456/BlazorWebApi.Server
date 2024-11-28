@@ -12,6 +12,7 @@ namespace BlazorWebApi.SharedComponents
         public AuthService(ILocalStorageService localStorage)
         {
             _localStorage = localStorage;
+            Console.WriteLine("_localStorage");
         }
         public AuthService()
         {
@@ -21,8 +22,19 @@ namespace BlazorWebApi.SharedComponents
         // بررسی وضعیت احراز هویت
         public async Task<bool> IsAuthenticated()
         {
-            var token = await _localStorage.GetItemAsync<string>("authToken");
-            return !string.IsNullOrEmpty(token);
+            try
+            {
+                string? token = await _localStorage.GetItemAsync<string?>("authToken");
+                Console.WriteLine(token?? " ");
+                return !string.IsNullOrEmpty(token);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("خطا در چک کردن توکن"+ex.Message);
+                return false;
+
+            }
+
         }
 
         // ذخیره توکن JWT در LocalStorage

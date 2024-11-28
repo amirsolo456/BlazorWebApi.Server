@@ -25,6 +25,8 @@ builder.Services.AddScoped<IMessagesService, MessagesService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IOwnerService, OwnerService>();
 builder.Services.AddScoped<ILoginLogService, LoginLogService>();
+builder.Services.AddScoped<IGiftCartService, GiftCartService>();
+builder.Services.AddScoped<ICommentsService, CommentsService>();
 //builder.Services.AddScoped<IAdminLogService, AdminLogService>();
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

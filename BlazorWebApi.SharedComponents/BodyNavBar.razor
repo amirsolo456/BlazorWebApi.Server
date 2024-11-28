@@ -1,14 +1,5 @@
-﻿<style>
-    .navbar{
-        background-color:white !important;
-        border:1px solid ;
-        border-color:gray;
-        border-radius:10px;
-        margin:5px;
-    }
-
-
-</style>
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="BodyNavBar.razor.css">
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -18,47 +9,78 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- تغییر از me-auto به ms-auto -->
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="#">
+                        <i class="fa fa-home"></i> Home
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="" @onclick="OnOffer">پیشنهادات ویژه</a>
+                    <a class="nav-link" href="#targetSection" @onclick="OnSpecOffer">
+                        <i class="fa fa-hashtag"></i> پیشنهادات ویژه
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#targetSection" @onclick="OnGiftCart">
+                        <i class="fa fa-gift"></i> کارت هدیه
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#targetSection" @onclick="OnDiscount">
+                        <i class="fa fa-percent"></i> تخفیف ها و پیشنهاد ها
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#targetSection" @onclick="OnBest">
+                        <i class="fa fa-star-o fa-1" aria-hidden="true"></i>بهترین ها
+                    </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         دسته بندی ها
                     </a>
                     <ul style="list-style-type: none; padding: 0; text-align: right;" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#" @onclick="() => HandleSpecialOfferClick(0)">خونه باغ</a></li>
-                        <li><a class="dropdown-item" href="#" @onclick="() => HandleSpecialOfferClick(1)">بوم گردی</a></li>
-                        <li><a class="dropdown-item" href="#" @onclick="() => HandleSpecialOfferClick(2)">ویلای لوکس</a></li>
-                        <li><a class="dropdown-item" href="#" @onclick="() => HandleSpecialOfferClick(3)">هتل</a></li>
-                        <li><a class="dropdown-item" href="#" @onclick="() => HandleSpecialOfferClick(4)">میهمانسرا</a></li>
-                        <li><a class="dropdown-item" href="#" @onclick="() => HandleSpecialOfferClick(5)">سوئیت</a></li>
+                        <li class="dropdown-li"><a class="dropdown-item" href="#targetSection" @onclick="() => HandleCategoryrClick(1)">خونه باغ</a></li>
+                        <li class="dropdown-li"><a class="dropdown-item" href="#targetSection" @onclick="() => HandleCategoryrClick(2)">بوم گردی</a></li>
+                        <li class="dropdown-li"><a class="dropdown-item" href="#targetSection" @onclick="() => HandleCategoryrClick(3)">ویلای لوکس</a></li>
+                        <li class="dropdown-li"><a class="dropdown-item" href="#targetSection" @onclick="() => HandleCategoryrClick(4)">هتل</a></li>
+                        <li class="dropdown-li"><a class="dropdown-item" href="#targetSection" @onclick="() => HandleCategoryrClick(5)">میهمانسرا</a></li>
+                        <li class="dropdown-li"><a class="dropdown-item" href="#targetSection" @onclick="() => HandleCategoryrClick(6)">سوئیت</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">سوالی دارید؟</a>
                 </li>
+
+                <li class="nav-item fade-effect">
+                    <a class="nav-link " href="#" tabindex="-1" aria-disabled="true">املاک خود را اینجا اجاره دهید!</a>
+                </li>
+
+
             </ul>
-            <form class="d-flex" style="margin-left:130px ;  margin-right:25px">
-                <input style="margin-right:50px" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-@*                 <button class="btn btn-outline-success" type="submit">Search</button>
- *@            </form>
+            <form class="d-flex" style="margin-left:130px ; margin-right:25px">
+                <input style="margin-right:50px" class="form-control me-2" type="search" placeholder="جستجو" aria-label="Search">
+            </form>
         </div>
     </div>
 </nav>
+
 @code {
     [Parameter]
-    public EventCallback OnOffer { get; set; }
-
+    public EventCallback OnSpecOffer { get; set; }
     [Parameter]
     public EventCallback<int> Category { get; set; }
+    [Parameter]
+    public EventCallback OnGiftCart { get; set; }
+    [Parameter]
+    public EventCallback OnDiscount { get; set; }
+    [Parameter]
+    public EventCallback OnBest { get; set; }
 
-    private async Task HandleSpecialOfferClick(int Type)
+
+    private async Task HandleCategoryrClick(int Type)
     {
+        Console.WriteLine("type");
         Console.WriteLine("ok");
         if (Category.HasDelegate)
         {
@@ -68,9 +90,33 @@
 
     private async Task HandleSpecialOffersClick()
     {
-        if (OnOffer.HasDelegate)
+        if (OnSpecOffer.HasDelegate)
         {
-            await OnOffer.InvokeAsync(null);
+            await OnSpecOffer.InvokeAsync(null);
+        }
+    }
+
+    private async Task HandleGiftCartClick()
+    {
+        if (OnGiftCart.HasDelegate)
+        {
+            await OnGiftCart.InvokeAsync(null);
+        }
+    }
+
+    private async Task HandleDiscountClick()
+    {
+        if (OnDiscount.HasDelegate)
+        {
+            await OnDiscount.InvokeAsync(null);
+        }
+    }
+
+    private async Task HandleBestClick()
+    {
+        if (OnBest.HasDelegate)
+        {
+            await OnBest.InvokeAsync(null);
         }
     }
 }

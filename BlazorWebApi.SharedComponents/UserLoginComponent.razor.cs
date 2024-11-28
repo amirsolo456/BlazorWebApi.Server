@@ -17,7 +17,8 @@ namespace BlazorWebApi.SharedComponents
 
         public async Task OpenModal()
         {
-            await JSRuntime.InvokeVoidAsync("OpenUserLoginModal", id);
+            if (JSRuntime != null)
+                await JSRuntime.InvokeVoidAsync("OpenUserLoginModal", id);
         }
     }
 }

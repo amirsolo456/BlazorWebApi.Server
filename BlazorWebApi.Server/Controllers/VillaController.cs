@@ -58,6 +58,18 @@ namespace BlazorWebApi.Server.Controllers
             return _VillaService.GetNotReservedVillas();
         }
 
+        [HttpGet("takhfif")]
+        public IEnumerable<Villa> GetVillaByTakhfif()
+        {
+            return _VillaService.GetVillaByTakhfif();
+        }
+
+        [HttpGet("best")]
+        public IEnumerable<Villa> GetVillaByBest()
+        {
+            return _VillaService.GetVillaByBest();
+        }
+
         [HttpPut]
         public void Update(Villa villa)
         {
@@ -94,6 +106,7 @@ namespace BlazorWebApi.Server.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message.ToString());
             }
         }
 

@@ -1,0 +1,165 @@
+﻿@inject NavigationManager navigationManager;
+@inject HttpClient _httpClient
+<style>
+    .card {
+        box-shadow: -1px 1px 10px;
+        border-radius: 10px; /* گرد کردن گوشه‌ها */
+    }
+
+    .card {
+        box-shadow: -1px 1px 10px rgba(0, 0, 0, 0.1); /* سایه اولیه */
+        border-radius: 10px; /* گرد کردن گوشه‌ها */
+        transition: all 0.3s ease; /* انیمیشن برای تغییرات */
+        overflow: hidden; /* جلوگیری از بیرون زدن تصویر */
+    }
+
+        .card:hover {
+            transform: scale(1.05); /* بزرگ‌کردن کارت */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* سایه برجسته‌تر هنگام هاور */
+        }
+
+        .card img {
+            width: 100%; /* مطمئن می‌شویم که تصویر به اندازه کارت باشد */
+            transition: transform 0.3s ease; /* انیمیشن برای تصویر */
+        }
+
+        .card:hover img {
+            transform: scale(1.05); /* بزرگ کردن تصویر کمی هنگام هاور */
+        }
+
+</style>
+
+<div class="card col-3 m-2" style="width: 18rem;padding:0">
+    @if (giftcart.Type == 1)
+    {
+        <img style="width:100%" class="card-img-top" alt="..." src="_content/BlazorWebApi.SharedComponents/Images/GiftCartImages/GoldGiftCart.png">
+    }
+    else if (giftcart.Type == 2)
+    {
+        <img style="width:100%" class="card-img-top" alt="..." src="_content/BlazorWebApi.SharedComponents/Images/GiftCartImages/BronzeGiftCart.png">
+
+    }
+    else if (giftcart.Type == 3)
+    {
+        <img style="width:100%" class="card-img-top" alt="..." src="_content/BlazorWebApi.SharedComponents/Images/GiftCartImages/SilverGiftCart.png">
+    }
+
+    @*     <img style="width:100%" class="card-img-top" alt="..." src="_content/BlazorWebApi.SharedComponents/wwwroot/Images/GiftCartImages/ @(giftcart.Type == 1 ? "GoldGiftCart.png" : (giftcart.Type == 2 ? "BronzeGiftCart.png" :"SilverGiftCart.png"))">
+ *@    <div class="card-body">
+        <h5 class="card-title">
+            @*             <a href="">
+                @giftcart.
+            </a> *@
+        </h5>
+        <p class="card-text">قیمت : @giftcart.Price.Value.ToString("N0")</p>
+        <p class="card-text">موجودی کارت : @giftcart.Balance.ToString("N0")</p>
+
+        <div>
+
+            <input @bind="quantity" type="number" placeholder="تعداد؟" class="form-control" />
+
+            <button class="btn btn-outline-success m-2" @onclick="AddToCartAsync">
+                <span>
+                    خرید گیفت کارت
+                </span>
+
+            </button>
+
+        </div>
+        <a style="margin-right:5px" href="/VillaDetail/@giftcart.CustomerID" class="btn btn-primary">نمایش جزئیات</a>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public GiftCarts? giftcart { get; set; }
+    [Parameter]
+    public bool IsMobile { get; set; }
+
+    public double? quantity { get; set; } = 0;
+    // private bool HasProductInCart { get; set; } = false;
+
+    // [CascadingParameter(Name = "ShoppingCartCountModel")]
+    // private ShoppingCartCountModel? shoppingCartCountModel { get; set; }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // if (giftcart != null)
+        // {
+        //     string url = "http://10.0.2.2:6170/api/GiftCarts/has-villa/";
+        //     if (!IsMobile) url = "http://localhost:6170/api/ShoppingCart/has-villa/";
+        //     HasProductInCart = await _httpClient.GetFromJsonAsync<bool>(
+        //         url + villa.ID + "," + 0
+        //         );
+        // }
+
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task AddToCartAsync()
+    {
+        // if (villa != null)
+        // {
+        //     string url = "http://10.0.2.2:6170/api/ShoppingCart";
+        //     if (!IsMobile) url = "http://localhost:6170/api/ShoppingCart";
+
+        //     Console.WriteLine(HasProductInCart.ToString());
+        //     if (!HasProductInCart)
+        //     {
+        //         Console.WriteLine(JsonSerializer.Serialize(
+        //                 new ShoppingCart
+        //                     {
+        //                         CustomerID = 1,
+        //                         Quantity = quantity.Value,
+        //                         VillaID = villa.ID
+        //                     }));
+        //         var request = new HttpRequestMessage(HttpMethod.Post, url);
+        //         // request.Headers.Add("Authorization", Configuration.GetValue<string>("ApiKey"));
+        //         request.Content = new StringContent(
+        //             JsonSerializer.Serialize(
+        //                 new ShoppingCart
+        //                     {
+        //                         CustomerID = 1,
+        //                         Quantity = quantity.Value,
+        //                         VillaID = villa.ID
+        //                     }
+        //             ), System.Text.Encoding.UTF8, "application/json"
+        //             );
+        //         await _httpClient.SendAsync(request);
+
+        //     }
+        //     else
+        //     {
+        //         var request = new HttpRequestMessage(HttpMethod.Put, url);
+        //         // request.Headers.Add("Authorization", Configuration.GetValue<string>("ApiKey"));
+        //         request.Content = new StringContent(
+        //             JsonSerializer.Serialize(
+        //                 new ShoppingCart
+        //                     {
+        //                         CreateDate = DateTime.Now,
+        //                         CustomerID = 1,
+        //                         Quantity = quantity.Value,
+        //                         UpdateDate = DateTime.Now,
+        //                         VillaID = villa.ID
+        //                     }
+        //                 ), System.Text.Encoding.UTF8, "application/json"
+        //             );
+        //         await _httpClient.SendAsync(request);
+        //     }
+
+        //     HasProductInCart = await _httpClient.GetFromJsonAsync<bool>(
+        //         "http://10.0.2.2:6170/api/ShoppingCart/has-villa/" + villa.ID + "," + 0
+        //         );
+
+        //     quantity = null;
+
+        //     if (shoppingCartCountModel != null)
+        //     {
+        //         shoppingCartCountModel.OnCountChange();
+        //     }
+        // }
+        //.NavigateTo("/cart");
+    }
+}

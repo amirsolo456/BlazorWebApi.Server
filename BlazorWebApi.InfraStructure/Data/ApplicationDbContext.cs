@@ -29,6 +29,12 @@ namespace BlazorWebApi.Infrastructure.Data
             modelBuilder.Entity<VillaCategory>()
     .HasKey(vc => new { vc.ID, vc.IDType, vc.CategoryID });
 
+            modelBuilder.Entity<Villa>()
+    .HasMany(v => v.Comments)
+    .WithOne(c => c.Villa)
+    .HasForeignKey(c => c.VillaID)
+    .OnDelete(DeleteBehavior.Cascade);
+
         }
 
         public DbSet<Villa> tblVillas { get; set; }
@@ -42,5 +48,7 @@ namespace BlazorWebApi.Infrastructure.Data
         public DbSet<OnvanList> tblOnvanList { get; set; }
         public DbSet<LoginLog> tblLoginLog { get; set; }
         public DbSet<VillaCategory> tblVillaCategory { get; set; }
+        public DbSet<GiftCarts> tblGiftCart { get; set; }
+        public DbSet<Comments> tblComment { get; set; }
     }
 }

@@ -1,72 +1,80 @@
-﻿
-@inject HttpClient _httpClient
+﻿@inject HttpClient _httpClient
+@using Blazored.LocalStorage
+@inject ILocalStorageService _localStorage
+
+<script src="_content/BlazorWebApi.SharedComponents/UserLoginJS.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <style>
     .topnav {
-/*         overflow: hidden; */
-        /*         background-color: aliceblue;
-     */ direction: rtl;
-        z-index: 9999;
-        font-family: Tahoma;
-        font-size: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        position: relative;
+    direction: rtl;
+    z-index: 4;
+    font-family: Tahoma;
+    font-size: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /*         padding: 10px;
+    */ position: relative;
     }
 
-        .topnav a {
-            float: left;
-            color: dimgray;
-            text-align: center;
-            padding: 14px 15px;
-            text-decoration: none;
-            font-size: 12px;
-        }
+    .topnav .topnav-left > a, .topnav .topnav-right > a {
+    float: left;
+    color: dimgray;
+    text-align: center;
+    padding: 14px 15px;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 20;
+    margin-right: 5px;
+    border-radius: 5px;
+    width: 150px;
+    }
 
-            .topnav a:hover {
-                background-color: #ddd;
-                color: black;
-            }
+    .topnav .topnav-left > a:hover, .topnav .topnav-right > a:hover {
+    background-color: #04AA6D;
+    color: black;
+    }
 
-            .topnav a.active {
-                background-color: #04AA6D;
-                color: white;
-            }
+    .topnav .topnav-left > a.active, .topnav .topnav-right > a.active {
+    background-color: #04AA6D;
+    color: white;
+    }
 
     .topnav-right {
-        float: right;
-        margin-right: 50px;
-        display: flex;
-        align-items: center;
+    float: right;
+    display: flex;
+    align-items: center;
+    position: relative;
+    right: 150px;
+    padding-bottom: 10px;
     }
 
     .topnav-left {
-        float: left;
-        margin-left: 50px;
+    float: left;
+    left: 220px;
+    position: relative;
     }
 
     .active {
-        background-color: #04AA6D;
-        color: white;
+    background-color: #04AA6D;
+    color: white;
     }
 
     .find-nav {
-        display: flex;
-        margin: auto;
-        margin-top: 10px;
+    display: flex;
+    margin-top: 10px;
     }
 
-        .find-nav button:hover {
-            transform: scale(1.1);
-            background-color: aqua;
-            border-radius: 2px;
-        }
+    .find-nav button:hover {
+    transform: scale(1.1);
+    background-color: aqua;
+    border-radius: 2px;
+    }
 
-    /* مخفی کردن منو در حالت پیش‌فرض */
+    /* مخفی کردن منو در حالت پیش‌فرض
     .hidden {
-        display: none;
+    display: none;
     }
 
 </style>
@@ -76,16 +84,17 @@
     loginid = 0;
 } *@
 
-<div class="row" style="margin:auto !important; border-radius:5px !important;">
-    <a href="javascript:void(0)">
+<div class="row" style="position:relative;  margin-left:0px;left:-10px;   z-index: 2;border-radius:5px !important;background-color:transparent; border:1px solid rgba(0,0,0,0.2);display:flex; width:120%">
+    <div style="width:20px ; height:100% ; margin-right:0px;background-color:firebrick; border-radius:5px ">
+    </div>
+    <a href="javascript:void(0)" style="width:90%">
         <button class="btnFont btnSize btn btn-outline " style="margin:auto ; border-radius:5px;" @onclick="Openmodal">ورود / عضویت</button>
-        <BlazorWebApi.SharedComponents.UserLoginComponent @ref=userLoginComponent>
-
-        </BlazorWebApi.SharedComponents.UserLoginComponent>
-
     </a>
 </div>
 
+<BlazorWebApi.SharedComponents.UserLoginComponent @ref=userLoginComponent>
+
+</BlazorWebApi.SharedComponents.UserLoginComponent>
 
 <div class="topnav">
     <div class="topnav-right">
@@ -93,62 +102,60 @@
     </div>
 </div>
 <div class="topnav">
-    <div class="topnav-left">
-        <a href="#about">تماس با ما</a>
-    </div>
     <div class="topnav-right">
         <a href="/" id="homeLink">
+            <i class="fa-solid fa-house"></i>
             خانه
         </a>
         <a href="/VillaIndex" id="dashboardLink">
+            <i class="fa-solid fa-gauge-high"></i>
             داشبورد
         </a>
         <a href="/cart" id="cartLink">
+            <i class="fa-solid fa-cart-shopping"></i>
             سبد خرید
         </a>
     </div>
+    <div class="topnav-left">
+        <a href="#about">
+            <i class="fa-solid fa-phone fa-rotate-180"></i>
+
+            تماس با ما
+        </a>
+    </div>
+
 </div>
-<div class="topnav">
-    <div style="width:90%">
-        <div class="topnav-right">
+<div class="topnav" style="max-width:90%">
+    <div style="width:80%">
+        <div class="topnav-right" style="width:80%">
             <div class="find-nav">
-                <a href="#about">جستجو</a>
-                <input style="margin-top:10px; margin-right:50px ; height:30px; width:400px;" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <i class="fa fa-search fa-2" style="min-width:30px; max-width:50px; margin:auto; color:rgba(0,0,0,0.4) " aria-hidden="true"></i>
+                <input style="  margin-right:50px ; height:50px; width:700px; background-color:aliceblue;" class="form-control me-2" type="search" placeholder="جستجو" aria-label="Search">
             </div>
 
         </div>
     </div>
 
-    <div class="btn-login" style="width:10%; left:2px !important">
+    <div class="btn-login" style="width:15%; left:2px !important ;transform:scale(1.3)">
         <BlazorWebApi.SharedComponents.BtnLoginComponent />
 
     </div>
 
 </div>
-
-
-
-
-@* <div class="profile-menu-container">
-    <button id="profile-menu-button" class="profile-menu-button">پروفایل</button>
-    <div id="profile-dropdown-menu" class="profile-dropdown-menu hidden">
-        <ul>
-            <li><a href="/profile/">پروفایل</a></li>
-            <li><a href="/digiclub/">دیجی‌کلاب</a></li>
-            <li><a href="/plus/landing/">پلاس</a></li>
-            <li><a href="/profile/orders/">سفارش‌ها</a></li>
-            <li><a href="/profile/lists/">لیست‌ها</a></li>
-            <li><a href="/profile/comments/">دیدگاه‌ها و پرسش‌ها</a></li>
-            <li><a href="/profile/notification/">پیام‌ها</a></li>
-            <li><a href="/logout">خروج</a></li>
-        </ul>
-    </div>
-</div> *@
-
-
+<div class="navigation-indicator"
+style="
+        bottom: 0;
+        left: 0;
+        z-index: 2;
+        background-color: rgba(0,0,0,0.5); /* رنگ خط */
+        height: 1px; /* ارتفاع خط */
+        width: 100%; /* طول اولیه */
+        transform: translate3d(0px, 0px, 0px); /* موقعیت اولیه */
+        transition: transform 0.3s ease, width 0.3s ease; /* انیمیشن نرم هنگام جابجایی */">
+</div>
 
 <script>
-        // برای نمایش و مخفی کردن منو
+    // برای نمایش و مخفی کردن منو
 
 
 
@@ -183,50 +190,19 @@
 </script>
 
 @code {
-    int loginid = 0;
+    public AuthService AuthService = new AuthService();
+    public bool IsIN { get; set; } = false;
 }
 @functions {
-    private void changeloginid()
-    {
-        loginid = 1;
-        StateHasChanged();
-    }
-
-}
-
-@* 
-(
-<span>
-                    @if (shoppingCartCountModel != null)
-                {
-                    @shoppingCartCountModel.Count
-                }
-</span>
-            ) *@
-@*         <a class="" href="#">
-            <img style="max-width:50px ; max-height:18px" src="/@_Configuration["Sitelogo"]" />
-            @_Configuration["Title"]
-        </a> *@
-@* @code
-{
-    [CascadingParameter(Name = "ShoppingCartCountModel")]
-    private ShoppingCartCountModel? shoppingCartCountModel { get; set; }
-    int CustomerID = 1;
     protected override async Task OnInitializedAsync()
     {
-        if (shoppingCartCountModel != null)
-        {
+        string? token = await _localStorage.GetItemAsync<string>("authToken");
+        if (!string.IsNullOrEmpty(token))
+            IsIN = true;
+        else IsIN = false;
 
-            shoppingCartCountModel.CountChange += async () =>
-            {
-                shoppingCartCountModel.Count = await _httpClient.GetFromJsonAsync<int>("/api/ShoppingCart/count");
-                StateHasChanged();
-            };
-
-        }
         await base.OnInitializedAsync();
     }
+}
 
-
-} *@
 

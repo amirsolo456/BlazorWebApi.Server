@@ -4,6 +4,7 @@ using BlazorWebApi.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorWebApi.InfraStructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241119162054_addGiftCartToDb")]
+    partial class addGiftCartToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,7 +159,7 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,3)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -178,37 +181,27 @@ namespace BlazorWebApi.InfraStructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExpirationDate")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsTransferable")
                         .HasColumnType("bit");
 
                     b.Property<string>("IssueDate")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<decimal?>("Price")
-                        .IsRequired()
-                        .HasColumnType("decimal(18,3)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<int?>("UsageLimit")
                         .HasColumnType("int");
 
                     b.Property<decimal>("UsedAmount")
-                        .HasColumnType("decimal(18,3)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("ID");
 
@@ -314,46 +307,6 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("tblOwners");
-                });
-
-            modelBuilder.Entity("BlazorWebApi.Domain.Entities.Shared.Comments", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedAt")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("VillaID")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VillaID");
-
-                    b.ToTable("tblComment");
                 });
 
             modelBuilder.Entity("BlazorWebApi.Domain.Entities.Shared.LoginLog", b =>
@@ -512,9 +465,6 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
                     b.Property<int>("Sqft")
                         .HasColumnType("int");
 
@@ -596,17 +546,6 @@ namespace BlazorWebApi.InfraStructure.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("BlazorWebApi.Domain.Entities.Shared.Comments", b =>
-                {
-                    b.HasOne("BlazorWebApi.Domain.Entities.Villa", "Villa")
-                        .WithMany("Comments")
-                        .HasForeignKey("VillaID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Villa");
-                });
-
             modelBuilder.Entity("BlazorWebApi.Domain.Entities.ShoppingCart", b =>
                 {
                     b.HasOne("BlazorWebApi.Domain.Entities.Customer", null)
@@ -638,11 +577,6 @@ namespace BlazorWebApi.InfraStructure.Migrations
             modelBuilder.Entity("BlazorWebApi.Domain.Entities.Customer", b =>
                 {
                     b.Navigation("ShoppingCarts");
-                });
-
-            modelBuilder.Entity("BlazorWebApi.Domain.Entities.Villa", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }
